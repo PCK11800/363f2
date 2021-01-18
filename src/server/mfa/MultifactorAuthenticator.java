@@ -28,6 +28,7 @@ public class MultifactorAuthenticator {
     {
         properties = System.getProperties();
         final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
+
         // Get a Properties object
         properties.setProperty("mail.smtp.host", "smtp.gmail.com");
         properties.setProperty("mail.smtp.socketFactory.class", SSL_FACTORY);
@@ -47,7 +48,7 @@ public class MultifactorAuthenticator {
                 });
     }
 
-    public void sendEmail(String destinationEmail, int authenticationCode)
+    public void sendAuthenticationCode(String destinationEmail, int authenticationCode)
     {
         init();
         try
@@ -71,6 +72,6 @@ public class MultifactorAuthenticator {
     public static void main(String[] args)
     {
         MultifactorAuthenticator mfa = new MultifactorAuthenticator();
-        mfa.sendEmail("chinkiu.pak@gmail.com", 69420);
+        mfa.sendAuthenticationCode("chinkiu.pak@gmail.com", 69420);
     }
 }
