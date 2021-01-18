@@ -4,6 +4,7 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
+import java.util.Random;
 
 public class MultifactorAuthenticator {
 
@@ -68,10 +69,18 @@ public class MultifactorAuthenticator {
         }
     }
 
+    public int generateAuthenticationCode()
+    {
+        Random random = new Random();
+        int code = random.nextInt(999999);
+        return code;
+    }
+
     //Test
     public static void main(String[] args)
     {
         MultifactorAuthenticator mfa = new MultifactorAuthenticator();
-        mfa.sendAuthenticationCode("chinkiu.pak@gmail.com", 69420);
+        int authenticationCode = mfa.generateAuthenticationCode();
+        mfa.sendAuthenticationCode("chinkiu.pak@gmail.com", authenticationCode);
     }
 }
