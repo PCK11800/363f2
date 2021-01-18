@@ -1,4 +1,4 @@
-package src.server.mfa;
+package server.mfa;
 
 public class MultifactorAuthenticator {
 
