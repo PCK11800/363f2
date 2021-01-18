@@ -1,11 +1,9 @@
-package client;
-
 public class Main {
 
     public Main(){
         LogIn loginPage = new LogIn();
         String user = loginPage.getUser();
-        System.out.println(user);
+        FileViewer fileViewer = new FileViewer(user);
     }
 
     public static void main(String args[]){
