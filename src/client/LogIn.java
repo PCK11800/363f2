@@ -1,13 +1,12 @@
-package client;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.Color;
 import java.awt.Dimension;
 
+/**
+ * This class enables a user to log in to the system.
+ */
 public class LogIn{
     private volatile boolean validInput = false;
     private String user = "";
@@ -18,7 +17,6 @@ public class LogIn{
     private JPanel userNamePanel = new JPanel();
     private JPanel passwordPanel = new JPanel();
     private JPanel submitPanel = new JPanel();
-    private JPanel createAccountPanel = new JPanel();
     private JPanel errorPanel = new JPanel();
 
     private JLabel logInLabel = new JLabel("Log In");
@@ -30,8 +28,6 @@ public class LogIn{
     private JFormattedTextField password = new JFormattedTextField();
 
     private JButton submit = new JButton("Submit");
-
-    private JLabel createAccountLabel = new JLabel("Click HERE to create an account");
 
     private JLabel errorLabel = new JLabel("    ");
 
@@ -55,9 +51,6 @@ public class LogIn{
 
         submitPanel.add(submit);
 
-        createAccountLabel.setForeground(Color.BLUE);
-        createAccountPanel.add(createAccountLabel);
-
         errorLabel.setForeground(Color.RED);
         errorPanel.add(errorLabel);
 
@@ -65,14 +58,12 @@ public class LogIn{
         userNamePanel.setMaximumSize(new Dimension(250, 30));
         passwordPanel.setMaximumSize(new Dimension(250, 30));
         submitPanel.setMaximumSize(new Dimension(250, 30));
-        createAccountPanel.setMaximumSize(new Dimension(250, 30));
         errorPanel.setMaximumSize(new Dimension(250, 30));
 
         mainPanel.add(logInPanel);
         mainPanel.add(userNamePanel);
         mainPanel.add(passwordPanel);
         mainPanel.add(submitPanel);
-        mainPanel.add(createAccountPanel);
         mainPanel.add(errorPanel);
 
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -83,9 +74,6 @@ public class LogIn{
 
         submit.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e) {
             submitClicked();
-        }});
-        createAccountLabel.addMouseListener(new MouseAdapter(){public void mouseClicked(MouseEvent e) {
-            createAccountClicked();
         }});
     }
 
