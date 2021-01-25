@@ -62,11 +62,11 @@
       </method>
     </configuration>
     <configuration name="MultifactorAuthenticator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="server.mfa.MultifactorAuthenticator" />
+      <option name="MAIN_CLASS_NAME" value="server.MultifactorAuthenticator" />
       <module name="363f2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="server.mfa.*" />
+          <option name="PATTERN" value="server.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

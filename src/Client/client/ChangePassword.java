@@ -10,6 +10,9 @@ import java.awt.Dimension;
  * This class lets a user change their password.
  */
 public class ChangePassword {
+
+    Evaluation evaluation = new Evaluation();
+
     private JFrame window = new JFrame("Change Password");
     private JPanel mainPanel = new JPanel();
     private JPanel currentPasswordPanel = new JPanel();
@@ -17,6 +20,7 @@ public class ChangePassword {
     private JPanel confirmNewPasswordPanel = new JPanel();
     private JPanel submitPanel = new JPanel();
     private JPanel errorPanel = new JPanel();
+    private JPanel errorPanelTwo = new JPanel();
 
     private JLabel currentPasswordLabel = new JLabel("Current Password:");
     private JFormattedTextField currentPassword = new JFormattedTextField();
@@ -30,12 +34,18 @@ public class ChangePassword {
     private JButton submit = new JButton("Submit");
 
     private JLabel errorLabel = new JLabel("    ");
+    private JLabel errorLabelTwo = new JLabel("    ");
+    private JLabel errorLabelThree = new JLabel("    ");
+    private JLabel errorLabelFour = new JLabel("    ");
+    private JLabel errorLabelFive = new JLabel("    ");
 
     public ChangePassword(){
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         currentPasswordPanel.setLayout(new BoxLayout(currentPasswordPanel, BoxLayout.X_AXIS));
         newPasswordPanel.setLayout(new BoxLayout(newPasswordPanel, BoxLayout.X_AXIS));
         confirmNewPasswordPanel.setLayout(new BoxLayout(confirmNewPasswordPanel, BoxLayout.X_AXIS));
+        errorPanel.setLayout(new BoxLayout(errorPanel, BoxLayout.Y_AXIS));
+        errorPanelTwo.setLayout(new BoxLayout(errorPanelTwo, BoxLayout.X_AXIS));
 
         currentPasswordPanel.add(currentPasswordLabel);
         currentPasswordPanel.add(currentPassword);
@@ -49,19 +59,30 @@ public class ChangePassword {
         submitPanel.add(submit);
 
         errorLabel.setForeground(Color.RED);
+        errorLabelTwo.setForeground(Color.RED);
+        errorLabelThree.setForeground(Color.RED);
+        errorLabelFour.setForeground(Color.RED);
+        errorLabelFive.setForeground(Color.RED);
+
         errorPanel.add(errorLabel);
+        errorPanel.add(errorLabelTwo);
+        errorPanel.add(errorLabelThree);
+        errorPanel.add(errorLabelFour);
+        errorPanel.add(errorLabelFive);
+
+        errorPanelTwo.add(errorPanel);
 
         mainPanel.add(currentPasswordPanel);
         mainPanel.add(newPasswordPanel);
         mainPanel.add(confirmNewPasswordPanel);
         mainPanel.add(submitPanel);
-        mainPanel.add(errorPanel);
+        mainPanel.add(errorPanelTwo);
 
         currentPasswordPanel.setMaximumSize(new Dimension(250, 30));
         newPasswordPanel.setMaximumSize(new Dimension(250, 30));
         confirmNewPasswordPanel.setMaximumSize(new Dimension(250, 30));
         submitPanel.setMaximumSize(new Dimension(250, 30));
-        errorPanel.setMaximumSize(new Dimension(250, 30));
+        errorPanelTwo.setMaximumSize(new Dimension(250, 150));
 
         window.setContentPane(mainPanel);
         window.setSize(300, 245);
@@ -83,12 +104,21 @@ public class ChangePassword {
             return;
         }*/
 
-        if(!passwordIsValid(newPasswordInput)){
+        if(!evaluation.checkPasswordStrength(newPassword.getText())){
+            errorLabel.setText("Password must include at least one:");
+            errorLabelTwo.setText("Lower case character");
+            errorLabelThree.setText("Upper case character");
+            errorLabelFour.setText("Special character");
+            errorLabelFive.setText("Number");
             return;
         }
 
         if(!newPasswordInput.equals(confirmNewPasswordInput)){
             errorLabel.setText("Passwords do not match!");
+            errorLabelTwo.setText("    ");
+            errorLabelThree.setText("    ");
+            errorLabelFour.setText("    ");
+            errorLabelFive.setText("    ");
             return;
         }
         //-----------------------------------------   Needs to be implemented   -----------------------------------------

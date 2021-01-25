@@ -1,4 +1,4 @@
-package client;
+import client.*;
 
 public class Main {
 
