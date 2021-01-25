@@ -14,7 +14,7 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         boolean correctPass = pM.checkIfPasswordIsCorrect(userName, password);
         if(correctPass)
         {
-            //Send e-mail;
+            sendCodeToUser(userName);
         }
 
         return correctPass;
@@ -23,6 +23,11 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
     public boolean newAccount(String userName, String password) throws java.rmi.RemoteException
     {
         return pM.addNewUser(userName, password);
+    }
+    
+    public boolean changePassword(String userName, String password, String oldPassword)
+    {
+        return pM.changePassword(userName, password, oldPassword);
     }
 
     //Returns true if log out was successful, false otherwise
