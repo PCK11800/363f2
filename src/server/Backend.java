@@ -1,10 +1,8 @@
 import java.util.HashMap;
 
-import javax.mail.Session;
-
 public class Backend extends java.rmi.server.UnicastRemoteObject implements backendInterface{
-    private PasswordManager pM = new PasswordManager(); 
-    private SessionToken sessionKeys = new SessionToken();
+    private PasswordManager pM = new PasswordManager();
+
     public Backend()
         throws java.rmi.RemoteException{
             super();
@@ -26,20 +24,20 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         return pM.addNewUser(userName, password);
     }
     
-    public boolean changePassword(String userName, String password, String oldPassword)
+    public boolean changePassword(String userName, String password, String oldPassword) throws java.rmi.RemoteException
     {
         return pM.changePassword(userName, password, oldPassword);
     }
 
     //Returns true if log out was successful, false otherwise
-    public boolean logOut(String user, String sessionKey) throws java.rmi.RemoteException
+    public boolean logOut(String user) throws java.rmi.RemoteException
     {
-        sessionKeys.removeSessionToken(sessionKey);
-        if (!sessionKeys.tokenExists(sessionKey))
+        /*if(logout is successful)
         {
+            //invalidate session key
             return true;
-        }
-        else return false; 
+        }*/
+        return false;
     }
 
     private MultifactorAuthenticator mfa = new MultifactorAuthenticator();
@@ -52,14 +50,12 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         mfaMap.put(user, code);
     }
 
-    public boolean validateCode(String user, int inputtedCode) throws java.rmi.RemoteException
+    public String validateCode(String user, int inputtedCode) throws java.rmi.RemoteException
     {
         if(mfaMap.get(user) == inputtedCode)
         {
-            return true;
-        } else
-        {
-            return false;
+            //Return session key
         }
+        return null;
     }
 }
