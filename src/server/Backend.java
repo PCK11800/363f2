@@ -1,5 +1,3 @@
-package server;
-
 import java.util.HashMap;
 
 public class Backend extends java.rmi.server.UnicastRemoteObject implements backendInterface{
