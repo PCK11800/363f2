@@ -31,11 +31,11 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
     //Returns true if log out was successful, false otherwise
     public boolean logOut(String user) throws java.rmi.RemoteException
     {
-        if(logout is successful)
+        /*if(logout is successful)
         {
             //invalidate session key
             return true;
-        }
+        }*/
         return false;
     }
 
