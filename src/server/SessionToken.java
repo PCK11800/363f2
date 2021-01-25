@@ -24,6 +24,15 @@ public class SessionToken {
     public SessionToken()
     {
     }
+
+    public boolean tokenExists(String sessionToken)
+    {
+        if (sessionTokens.containsKey(sessionToken))
+        {
+            return true;
+        }
+        else return false;
+    } 
     
     
     /** 

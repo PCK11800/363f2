@@ -1,7 +1,10 @@
 import java.util.HashMap;
 
+import javax.mail.Session;
+
 public class Backend extends java.rmi.server.UnicastRemoteObject implements backendInterface{
     private PasswordManager pM = new PasswordManager(); 
+    private SessionToken sessionKeys = new SessionToken();
     public Backend()
         throws java.rmi.RemoteException{
             super();
@@ -29,14 +32,14 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
     }
 
     //Returns true if log out was successful, false otherwise
-    public boolean logOut(String user) throws java.rmi.RemoteException
+    public boolean logOut(String user, String sessionKey) throws java.rmi.RemoteException
     {
-        /*if(logout is successful)
+        sessionKeys.removeSessionToken(sessionKey);
+        if (!sessionKeys.tokenExists(sessionKey))
         {
-            //invalidate session key
             return true;
-        }*/
-        return false;
+        }
+        else return false; 
     }
 
     private MultifactorAuthenticator mfa = new MultifactorAuthenticator();

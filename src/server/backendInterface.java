@@ -7,7 +7,7 @@ public interface backendInterface extends java.rmi.Remote{
     public boolean newAccount(String userName, String password) throws java.rmi.RemoteException;
 
     //Returns true if log out was successful, false otherwise
-    public boolean logOut(String user) throws java.rmi.RemoteException;
+    public boolean logOut(String user, String sessionToken) throws java.rmi.RemoteException;
 
     //Sends a random generated code to user's email account
     public void sendCodeToUser(String user) throws java.rmi.RemoteException;
