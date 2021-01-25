@@ -1,5 +1,3 @@
-package server;
-
 public interface backendInterface extends java.rmi.Remote{
 
     //Takes a users login details and returns if they are correct
@@ -16,4 +14,10 @@ public interface backendInterface extends java.rmi.Remote{
 
     //Returns true if user inputted code is correct, false otherwise
     public boolean validateCode(String user, int inputtedCode) throws java.rmi.RemoteException;
+    
+    //Returns a valid session key if the code is correct
+    public String multiFactor(String user, String code) throws java.rmi.RemoteException;
+
+    //Returns true if password was chnaged, false otherwise
+    public boolean changePassword(String userName, String password) throws java.rmi.RemoteException;
 }
