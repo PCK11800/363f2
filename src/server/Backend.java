@@ -1,5 +1,7 @@
 package server;
 
+import java.util.HashMap;
+
 public class Backend extends java.rmi.server.UnicastRemoteObject implements backendInterface{
     private PasswordManager pM = new PasswordManager(); 
     public Backend()
@@ -34,13 +36,24 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         return false;
     }
 
-    //Returns a valid session key if the code is correct, return null otherwise
-    public String multiFactor(String user, String code) throws java.rmi.RemoteException
+    private MultifactorAuthenticator mfa = new MultifactorAuthenticator();
+    private HashMap<String, Integer> mfaMap = new HashMap<>(); // Stores Username and Code in a HashMap
+
+    public void sendCodeToUser(String user) throws java.rmi.RemoteException
     {
-        if(code is correct)
+        int code = mfa.generateAuthenticationCode();
+        mfa.sendAuthenticationCode("user.getEmail()", code);
+        mfaMap.put(user, code);
+    }
+
+    public boolean validateCode(String user, int inputtedCode) throws java.rmi.RemoteException
+    {
+        if(mfaMap.get(user) == inputtedCode)
         {
-            return //New session key
+            return true;
+        } else
+        {
+            return false;
         }
-        return null;
     }
 }
