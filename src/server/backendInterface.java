@@ -18,5 +18,5 @@ public interface backendInterface extends java.rmi.Remote{
     public boolean validateCode(String user, int inputtedCode) throws java.rmi.RemoteException;
 
     //Returns true if password was chnaged, false otherwise
-    public boolean changePassword(String userName, String password) throws java.rmi.RemoteException;
+    public boolean changePassword(String userName, String password, String oldPassword) throws java.rmi.RemoteException;
 }
