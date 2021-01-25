@@ -1,4 +1,4 @@
-package server.mfa;
+package server;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

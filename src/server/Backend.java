@@ -1,3 +1,5 @@
+package server;
+
 public class Backend extends java.rmi.server.UnicastRemoteObject implements backendInterface{
     private PasswordManager pM = new PasswordManager(); 
     public Backend()
