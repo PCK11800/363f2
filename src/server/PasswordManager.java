@@ -13,6 +13,8 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.imageio.stream.FileImageInputStream;
 public class PasswordManager{
     private HashMap<String, SaltHash> passwords = loadPasswords();
+    private String ADMIN_NAME = "ADMIN";
+
 
     public PasswordManager(){}
 
@@ -87,6 +89,7 @@ public class PasswordManager{
             SaltHash sh = new SaltHash(salt, hashedPassword);
             passwords.put(userName, sh);
             savePasswords();
+            System.out.println("Added user " + userName + " with the password " + password);
             return true;
         } catch (Exception e) {
             System.out.println("Adding new user failed: " + e);
@@ -139,6 +142,78 @@ public class PasswordManager{
         }
     }
 
+    public boolean addPermission(String userName, int perm, String adminPass)
+    {
+        boolean success = false;
+        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        {
+            System.out.println("Non-Admin user tried to add a permission");
+            return false;
+        }
+        if(passwords.containsKey(userName))
+        {
+            SaltHash newSH = passwords.get(userName);
+            success = newSH.addPermission(perm);
+            passwords.replace(userName, newSH);
+        }
+
+        if(!success)
+            System.out.println("Adding of permission was unsucessful");
+
+        return success;
+    }
+
+    public boolean removePermission(String userName, int perm, String adminPass)
+    {
+        boolean success = false;
+        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        {
+            System.out.println("Non-Admin user tried to remove a permission");
+            return false;
+        }
+        if(passwords.containsKey(userName))
+        {
+            SaltHash newSH = passwords.get(userName);
+            if(newSH.isPermitted(perm))
+            {
+                newSH.removePermission(perm);
+                passwords.replace(userName, newSH);
+                success = true;
+            }
+        }
+
+        if(!success)
+            System.out.println("Removing of the permission was unsuccessful");
+
+        return success;
+    }
+
+    public boolean isPermitted(String userName, int perm)
+    {
+        if(passwords.containsKey(userName))
+        {
+            SaltHash SH = passwords.get(userName);
+            return SH.isPermitted(perm);
+        }
+        System.out.println("That user doesn't exist");
+        return false;
+    }
+
+    public void clearPermissions(String userName, String adminPass)
+    {
+        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        {
+            System.out.println("Non-Admin user tried to clear a users permissions");
+            return;
+        }
+        if(passwords.containsKey(userName))
+        {
+            SaltHash SH = passwords.get(userName);
+            SH.clearPermissions();
+            passwords.replace(userName, SH);
+        }
+    }
+
     /**
      * Loads the previously saved passwords hashmap
      * @return The previously saved passwords hashmap, if there hasn't been one saved then a new empty hashmap will be returned
@@ -148,7 +223,9 @@ public class PasswordManager{
         try {
             FileInputStream FIS = new FileInputStream(new File("Passwords.txt"));
             ObjectInputStream OIS = new ObjectInputStream(FIS);
-            return (HashMap<String, SaltHash>) OIS.readObject();
+            Object o = OIS.readObject();
+            return new HashMap<String, SaltHash>();
+            //return (HashMap<String, SaltHash>) OIS.readObject();
         } catch (Exception e) {
             System.out.println("Password Load Failed: " + e);
             return new HashMap<String, SaltHash>();
