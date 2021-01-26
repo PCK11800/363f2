@@ -1,5 +1,3 @@
-package server;
-
 import java.beans.Encoder;
 import java.security.SecureRandom;
 import java.time.Duration;
