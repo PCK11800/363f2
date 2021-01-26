@@ -56,7 +56,7 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
     {
         if(mfaMap.get(user) == inputtedCode)
         {
-            sessionKeys.createSessionToken(user);
+            return sessionKeys.createSessionToken(user);
         }
         return null;
     }
