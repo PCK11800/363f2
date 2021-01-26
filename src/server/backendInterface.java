@@ -14,4 +14,16 @@ public interface backendInterface extends java.rmi.Remote{
 
     //Returns true if password was chnaged, false otherwise
     public boolean changePassword(String userName, String password, String oldPassword) throws java.rmi.RemoteException;
+    
+    public boolean addPermission(String userName, int perm, String adminPass)
+        throws java.rmi.RemoteException;
+
+    public boolean removePermission(String userName, int perm, String adminPass)
+        throws java.rmi.RemoteException;
+
+    public boolean isPermitted(String userName, int perm)
+        throws java.rmi.RemoteException;
+
+    public void clearPermissions(String userName, String adminPass)
+        throws java.rmi.RemoteException;
 }
