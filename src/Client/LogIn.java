@@ -104,7 +104,6 @@ public class LogIn{
         if(isValid(retrievedUserName, retrievedPassword)){
             user = retrievedUserName;
             validInput = true;
-            System.out.println(validInput);
         }
     }
 
@@ -114,7 +113,6 @@ public class LogIn{
      */
     private boolean isValid(String uName, String pWord){
         try {
-            //-----------------------------------------   Needs to be implemented   -----------------------------------------
             if (backEnd.login(uName, pWord)) {
                 return true;
             } else {
@@ -124,12 +122,5 @@ public class LogIn{
             System.out.println(re);
         }
         return false;
-    }
-
-    /**
-     * This method is called when someone clicks the 'create account' button.
-     */
-    private void createAccountClicked(){
-        System.out.println("\ncreate account button has been clicked!\n");
     }
 }

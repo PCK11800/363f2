@@ -3,12 +3,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.rmi.RemoteException;
 
 /**
  * This class lets a user change their password.
  */
 public class ChangePassword {
-
+    private backendInterface backEnd;
+    private String user;
     Evaluation evaluation = new Evaluation();
 
     private JFrame window = new JFrame("Change Password");
@@ -37,7 +39,10 @@ public class ChangePassword {
     private JLabel errorLabelFour = new JLabel("    ");
     private JLabel errorLabelFive = new JLabel("    ");
 
-    public ChangePassword(){
+    public ChangePassword(backendInterface backEnd, String user){
+        this.backEnd = backEnd;
+        this.user = user;
+
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         currentPasswordPanel.setLayout(new BoxLayout(currentPasswordPanel, BoxLayout.X_AXIS));
         newPasswordPanel.setLayout(new BoxLayout(newPasswordPanel, BoxLayout.X_AXIS));
@@ -96,12 +101,6 @@ public class ChangePassword {
         String newPasswordInput = newPassword.getText();
         String confirmNewPasswordInput = confirmNewPassword.getText();
 
-        //-----------------------------------------   Needs to be implemented   -----------------------------------------
-        /*if(!checkPassword(currentPassword.getText())){
-            errorLabel.setText("Wrong password!");
-            return;
-        }*/
-
         if(!evaluation.checkPasswordStrength(newPassword.getText())){
             errorLabel.setText("Password must include at least one:");
             errorLabelTwo.setText("Lower case character");
@@ -119,18 +118,17 @@ public class ChangePassword {
             errorLabelFive.setText("    ");
             return;
         }
-        //-----------------------------------------   Needs to be implemented   -----------------------------------------
-        //changePassword(user, newPasswordInput);
-        window.dispose();
-    }
 
-    /**
-     * Checks a password is valid and meets any requirements.
-     * @param pWord The password being evaluated.
-     * @return True if the requirements are met. False otherwise.
-     */
-    private boolean passwordIsValid(String pWord){
-        //-----------------------------------------   Needs to be implemented   -----------------------------------------
-        return true;
+        try {
+            if (backEnd.changePassword(user, newPasswordInput, currentPassword.getText())) {
+                errorLabel.setText("Wrong password!");
+                return;
+            }
+        } catch (RemoteException re) {
+            System.out.println(re);
+            errorLabel.setText("System error!");
+            return;
+        }
+        window.dispose();
     }
 }

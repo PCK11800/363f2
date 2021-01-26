@@ -20,7 +20,11 @@ public class Main {
 
         LogIn loginPage = new LogIn(backEnd);
         String user = loginPage.getUser();
-        FileViewer fileViewer = new FileViewer(user);
+        CodeInput codeInput = new CodeInput(backEnd, user);
+        String sessionKey = codeInput.getSessionKey();
+        if(sessionKey != null){
+            FileViewer fileViewer = new FileViewer(user, sessionKey, backEnd);
+        }
     }
 
     public static void main(String args[]){

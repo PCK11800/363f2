@@ -3,11 +3,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.rmi.RemoteException;
 
 /**
  * This class lets an admin create a new account.
  */
 public class CreateAccount {
+    private backendInterface backEnd;
+    private String user;
+
     private JFrame window = new JFrame("Create a new account");
     private JPanel mainPanel = new JPanel();
     private JPanel accountNamePanel = new JPanel();
@@ -32,7 +36,12 @@ public class CreateAccount {
 
     private JLabel errorLabel = new JLabel("    ");
 
-    public CreateAccount(){
+    public CreateAccount(backendInterface backEnd, String user){
+        this.backEnd = backEnd;
+        this.user = user;
+
+        // --------------------------- implement check here to make sure user is admin???? ---------------------------
+
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         accountNamePanel.setLayout(new BoxLayout(accountNamePanel, BoxLayout.X_AXIS));
         accountPasswordPanel.setLayout(new BoxLayout(accountPasswordPanel, BoxLayout.X_AXIS));
@@ -83,19 +92,13 @@ public class CreateAccount {
     }
 
     private void submitClicked(){
-        String aName = accountName.getText();
+        String uName = accountName.getText();
         String pWord = password.getText();
         int type = -1;
 
-        //-----------------------------------------   Needs to be implemented   -----------------------------------------
-        /*if(!accountNameAvailable(aName)){
-            errorLabel.setText("Account name not available");
+        /*if(!passwordIsValid(pWord)){
             return;
         }*/
-
-        if(!passwordIsValid(pWord)){
-            return;
-        }
 
         if(patientButton.isSelected()){
             type = 0;
@@ -107,8 +110,17 @@ public class CreateAccount {
             errorLabel.setText("Please select the account type");
             return;
         }
-        //-----------------------------------------   Needs to be implemented   -----------------------------------------
-        //createAccount(aName, pWord, type);
+
+        try {
+            if (!backEnd.newAccount(uName, pWord)){
+                errorLabel.setText("Account unavailable!");
+                return;
+            }
+        } catch (RemoteException re) {
+            System.out.println(re);
+            errorLabel.setText("System error!");
+            return;
+        }
         window.dispose();
     }
 

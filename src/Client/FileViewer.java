@@ -2,11 +2,16 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 /**
  * This class will display the appropriate data to the user.
  */
 public class FileViewer {
+    private backendInterface backEnd;
+    private String user;
+    private String sessionKey;
+
     private JFrame window = new JFrame("Hospital Data");
     private JPanel mainPanel = new JPanel();
     private JPanel menuBarPanel = new JPanel();
@@ -16,8 +21,12 @@ public class FileViewer {
     private JButton createAccount; //Only initiated if user is admin
 
     private JLabel dataPlaceHolderLabel = new JLabel("\n\nDATA WILL GO HERE");
+    private JButton logOut = new JButton("Log out");
 
-    public FileViewer(String user){
+    public FileViewer(String user, String sessionKey, backendInterface backEnd){
+        this.backEnd = backEnd;
+        this.user = user;
+        this.sessionKey = sessionKey;
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         menuBarPanel.setLayout(new BoxLayout(menuBarPanel, BoxLayout.X_AXIS));
@@ -34,6 +43,10 @@ public class FileViewer {
                 createAccountClicked();
             }});
         }
+        menuBarPanel.add(logOut);
+        logOut.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e) {
+            logOutClicked();
+        }});
 
         dataPanel.add(dataPlaceHolderLabel);  //-----------------------------------------   place holder only   -----------------------------------------
 
@@ -57,17 +70,27 @@ public class FileViewer {
         return true;
     }
 
+    private void logOutClicked(){
+        try {
+            if (backEnd.logOut(user, sessionKey)) {
+                window.dispose();
+            }
+        } catch (RemoteException re) {
+            System.out.println(re);
+        }
+    }
+
     /**
      * Used by users to change their passwords.
      */
     private void changePasswordClicked(){
-        ChangePassword changePassword = new ChangePassword();
+        ChangePassword changePassword = new ChangePassword(backEnd, user);
     }
 
     /**
      * Used by an admin to create a new account.
      */
     private void createAccountClicked(){
-        CreateAccount createAccount = new CreateAccount();
+        CreateAccount createAccount = new CreateAccount(backEnd, user);
     }
 }
