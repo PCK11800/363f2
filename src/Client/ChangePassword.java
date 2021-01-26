@@ -120,8 +120,12 @@ public class ChangePassword {
         }
 
         try {
-            if (backEnd.changePassword(user, newPasswordInput, currentPassword.getText())) {
+            if (!backEnd.changePassword(user, newPasswordInput, currentPassword.getText())) {
                 errorLabel.setText("Wrong password!");
+                errorLabelTwo.setText("    ");
+                errorLabelThree.setText("    ");
+                errorLabelFour.setText("    ");
+                errorLabelFive.setText("    ");
                 return;
             }
         } catch (RemoteException re) {
