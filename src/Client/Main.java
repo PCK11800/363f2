@@ -5,10 +5,11 @@ import java.rmi.NotBoundException;
 import java.net.MalformedURLException;
 
 public class Main {
+    private backendInterface backEnd;
 
     public Main(){
         try{
-            backendInterface backEnd = (backendInterface)
+            backEnd = (backendInterface)
                     Naming.lookup("rmi://localhost/1099");
         } catch (RemoteException re) {
             System.out.println(re);
@@ -18,7 +19,7 @@ public class Main {
             System.out.println("MalformedURLException");
         }
 
-        LogIn loginPage = new LogIn();
+        LogIn loginPage = new LogIn(backEnd);
         String user = loginPage.getUser();
         FileViewer fileViewer = new FileViewer(user);
     }

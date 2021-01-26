@@ -1,3 +1,4 @@
+
 public interface backendInterface extends java.rmi.Remote{
 
     //Takes a users login details and returns if they are correct
