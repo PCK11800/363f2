@@ -21,10 +21,11 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         return correctPass;
     }
 
-    public boolean newAccount(String userName, String password) throws java.rmi.RemoteException
+    public boolean newAccount(String userName, String password, String adminUserName, String adminPassword, int role)
     {
-        return pM.addNewUser(userName, password);
+        return pM.addNewUser(userName, password, adminUserName, adminPassword, role);
     }
+
     
     public boolean changePassword(String userName, String password, String oldPassword) throws java.rmi.RemoteException
     {
@@ -61,14 +62,14 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         return null;
     }
     
-    public boolean addPermission(String userName, int perm , String adminPass)
+    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass)
     {
-        return pM.addPermission(userName, perm, adminPass);
+        return pM.addPermission(userName, perm, adminUserName, adminPass);
     }
 
-    public boolean removePermission(String userName, int perm, String adminPass)
+    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
     {
-        return pM.removePermission(userName, perm, adminPass);
+        return pM.removePermission(userName, perm, adminUserName, adminPass);
     }
 
     public boolean isPermitted(String userName, int perm)
@@ -79,6 +80,11 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
     public void clearPermissions(String userName, String adminPass)
     {
         pM.clearPermissions(userName, adminPass);
+    }
+
+    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    {
+        return pM.deleteUser(userName, adminUserName, adminPassword);
     }
 
 }
