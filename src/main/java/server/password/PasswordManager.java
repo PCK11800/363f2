@@ -223,9 +223,9 @@ public class PasswordManager {
             URL res = getClass().getClassLoader().getResource("passwords/Passwords.txt");
             File file = Paths.get(res.toURI()).toFile();
             String absolutePath = file.getAbsolutePath();
+
             FileInputStream FIS = new FileInputStream(new File(absolutePath));
             ObjectInputStream OIS = new ObjectInputStream(FIS);
-
             return (HashMap<String, SaltHash>) OIS.readObject();
         } catch (Exception e) {
             e.printStackTrace();

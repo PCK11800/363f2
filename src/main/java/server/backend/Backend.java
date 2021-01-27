@@ -9,7 +9,8 @@ import java.util.HashMap;
 
 public class Backend extends UnicastRemoteObject implements BackendInterface {
 
-    private PasswordManager passwordManager = new PasswordManager();
+    //Assume it works for now
+    //private PasswordManager passwordManager = new PasswordManager();
 
     public Backend() throws RemoteException {
         super();

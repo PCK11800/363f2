@@ -32,7 +32,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/server/password" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -49,7 +49,7 @@
       <recent name="C:\Users\PCK11800\Desktop\Year 3 University\SCC300\363f2\src\main\java\client" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PasswordManager">
+  <component name="RunManager" selected="Application.Server">
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="client.Client" />
       <module name="363f2" />
@@ -91,8 +91,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PasswordManager" />
         <item itemvalue="Application.Server" />
+        <item itemvalue="Application.PasswordManager" />
         <item itemvalue="Application.Client" />
       </list>
     </recent_temporary>
@@ -108,6 +108,18 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="406" y="252" key="#com.intellij.ide.util.MemberChooser" timestamp="1611755124643">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -117,26 +129,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="243" y="293" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611761262777" />
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1611754342454">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1611763115794">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1611754342454" />
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom" timestamp="1611761744819">
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1611763115794" />
+    <state width="1877" height="321" key="GridCell.Tab.0.bottom" timestamp="1611762815562">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
-    <state width="1877" height="321" key="GridCell.Tab.0.center" timestamp="1611761744819">
+    <state width="1877" height="321" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611762815562" />
+    <state width="1877" height="321" key="GridCell.Tab.0.center" timestamp="1611762815562">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
-    <state width="1877" height="321" key="GridCell.Tab.0.left" timestamp="1611761744819">
+    <state width="1877" height="321" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611762815562" />
+    <state width="1877" height="321" key="GridCell.Tab.0.left" timestamp="1611762815562">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
-    <state width="1877" height="321" key="GridCell.Tab.0.right" timestamp="1611761744819">
+    <state width="1877" height="321" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611762815562" />
+    <state width="1877" height="321" key="GridCell.Tab.0.right" timestamp="1611762815562">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="321" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
+    <state width="1877" height="321" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611762815562" />
     <state x="577" y="341" key="chooseDestDirectoryDialog" timestamp="1611747892740">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
