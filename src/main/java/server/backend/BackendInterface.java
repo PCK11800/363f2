@@ -7,4 +7,7 @@ public interface BackendInterface extends Remote {
 
     // Returns if login is valid.
     public boolean login(String username, String password) throws RemoteException;
+
+    // Sends and returns an authentication code to user's email
+    public int sendAuthenticationCode(String username) throws RemoteException;
 }

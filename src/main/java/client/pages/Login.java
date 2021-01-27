@@ -4,6 +4,7 @@ import client.Client;
 import client.components.AppButton;
 import client.components.AppColors;
 import client.components.extras.GhostText;
+import client.components.extras.JTextFieldLimit;
 import client.components.font.Inconsolata;
 
 import javax.swing.*;
@@ -14,8 +15,6 @@ import java.rmi.RemoteException;
 public class Login extends JPanel {
 
     private Client client;
-    private JTextField user_field, password_field;
-    private AppButton login_button;
 
     public Login(Client client)
     {
@@ -31,15 +30,19 @@ public class Login extends JPanel {
         setSize(client.getPreferredSize());
         setBackground(AppColors.BACKGROUND);
 
+        initUsernamePasswordLogin();
+    }
+
+    private void initUsernamePasswordLogin()
+    {
         initLoginFields();
         initLoginButton();
     }
 
+    private JTextField user_field = new JTextField();
+    private JTextField password_field = new JTextField();
     private void initLoginFields()
     {
-        user_field = new JTextField();
-        password_field = new JTextField();
-
         user_field.setBounds(490, 200, 300, 50);
         password_field.setBounds(490, 260, 300, 50);
 
@@ -53,9 +56,9 @@ public class Login extends JPanel {
         add(password_field);
     }
 
+    private AppButton login_button = new AppButton();
     private void initLoginButton()
     {
-        login_button = new AppButton();
         login_button.requestFocus();
         login_button.setText("Login");
         login_button.setFontSize(22);
@@ -72,7 +75,7 @@ public class Login extends JPanel {
 
                     if(login_valid)
                     {
-                        // multifactor authentication
+                        initMultifactorAuthentication(username);
                     }
                     else
                     {
@@ -102,10 +105,84 @@ public class Login extends JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 login_button.setText("Login");
+                confirmation_button.setText("Confirm");
             }
 
             @Override
             public void focusLost(FocusEvent e) {
+            }
+        });
+    }
+
+    JLabel authenticationLabel = new JLabel("Authentication Code");
+    JTextField codeInput = new JTextField();
+    AppButton confirmation_button = new AppButton();
+    AppButton cancel_button = new AppButton();
+    private void initMultifactorAuthentication(String username)
+    {
+        int authenticationCode = 0000000; //Default invalid - can't have 7 digit codes
+        try
+        {
+            authenticationCode = client.bI().sendAuthenticationCode(username);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        //Remove Username/Password Login
+        removeAll();
+        repaint();
+
+        authenticationLabel.setBounds(490, 160, 300, 50);
+        authenticationLabel.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+        authenticationLabel.setFont(new Inconsolata().getFont(22));
+        authenticationLabel.setBackground(AppColors.BACKGROUND);
+        authenticationLabel.setForeground(AppColors.BORDER);
+        add(authenticationLabel);
+
+        codeInput = new JTextField();
+        codeInput.setBounds(490, 200, 300, 50);
+        codeInput.setHorizontalAlignment((int) CENTER_ALIGNMENT);
+        codeInput.setDocument(new JTextFieldLimit(6));
+        setFieldSettings(codeInput);
+        add(codeInput);
+
+        confirmation_button = new AppButton();
+        confirmation_button.setText("Confirm");
+        confirmation_button.setBounds(490, 260, 300, 50);
+        confirmation_button.setFontSize(22);
+        add(confirmation_button);
+
+        cancel_button = new AppButton();
+        cancel_button.setText("Cancel");
+        cancel_button.setBounds(490, 320, 300, 50);
+        cancel_button.setFontSize(22);
+        add(cancel_button);
+
+        int finalAuthenticationCode = authenticationCode;
+        confirmation_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int inputtedCode = Integer.parseInt(codeInput.getText());
+                if (inputtedCode == finalAuthenticationCode)
+                {
+                    System.out.println("Login successful");
+                    removeAll();
+                    repaint();
+                }
+                else
+                {
+                    confirmation_button.setText("!Invalid!");
+                }
+            }
+        });
+
+        cancel_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Remove MFA
+                removeAll();
+                repaint();
+                initUsernamePasswordLogin();
             }
         });
     }
