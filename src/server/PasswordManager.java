@@ -223,9 +223,7 @@ public class PasswordManager{
         try {
             FileInputStream FIS = new FileInputStream(new File("Passwords.txt"));
             ObjectInputStream OIS = new ObjectInputStream(FIS);
-            Object o = OIS.readObject();
-            return new HashMap<String, SaltHash>();
-            //return (HashMap<String, SaltHash>) OIS.readObject();
+            return (HashMap<String, SaltHash>) OIS.readObject();
         } catch (Exception e) {
             System.out.println("Password Load Failed: " + e);
             return new HashMap<String, SaltHash>();
