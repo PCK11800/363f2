@@ -19,6 +19,7 @@ public class FileViewer {
 
     private JButton changePassword = new JButton("Change Password");
     private JButton createAccount; //Only initiated if user is admin
+    private JButton editPermissions; //Only initiated if user is admin
 
     private JLabel dataPlaceHolderLabel = new JLabel("\n\nDATA WILL GO HERE");
     private JButton logOut = new JButton("Log out");
@@ -38,9 +39,14 @@ public class FileViewer {
         }});
         if(isAdmin(user)){
             createAccount = new JButton("Create an account");
+            editPermissions = new JButton("Edit permissions");
             menuBarPanel.add(createAccount);
+            menuBarPanel.add(editPermissions);
             createAccount.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e) {
                 createAccountClicked();
+            }});
+            editPermissions.addActionListener(new ActionListener(){public void actionPerformed(ActionEvent e) {
+                editPermissionsClicked();
             }});
         }
         menuBarPanel.add(logOut);
@@ -92,5 +98,9 @@ public class FileViewer {
      */
     private void createAccountClicked(){
         CreateAccount createAccount = new CreateAccount(backEnd, user);
+    }
+
+    private void editPermissionsClicked(){
+        Permissions permissions = new Permissions(backEnd, user);
     }
 }
