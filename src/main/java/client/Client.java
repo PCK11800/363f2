@@ -2,6 +2,7 @@ package client;
 
 import client.components.AppColors;
 import client.pages.Login;
+import client.pages.TaskSelection;
 import server.backend.BackendInterface;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.rmi.Naming;
 public class Client extends JFrame {
 
     private BackendInterface bI;
+    private JPanel currentPage = null;
 
     int APP_WIDTH = 1280;
     int APP_HEIGHT = 720;
@@ -46,16 +48,41 @@ public class Client extends JFrame {
         getContentPane().setBackground(AppColors.BACKGROUND);
         getContentPane().setLayout(null);
 
-        initComponents();
+        initLogin();
+    }
+
+    Login login = new Login(this);
+    public void initLogin()
+    {
+        resetPages();
+
+        login = new Login(this);
+        add(login);
+        currentPage = login;
 
         pack();
         repaint();
     }
 
-    private void initComponents()
+    TaskSelection workpage;
+    public void initTaskSelection(String username)
     {
-        Login login = new Login(this);
-        add(login);
+        resetPages();
+
+        workpage = new TaskSelection(username, this);
+        add(workpage);
+        currentPage = workpage;
+        pack();
+        repaint();
+    }
+
+    private void resetPages()
+    {
+        if(currentPage != null)
+        {
+            remove(currentPage);
+            repaint();
+        }
     }
 
     public BackendInterface bI()
