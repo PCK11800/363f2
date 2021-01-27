@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 public class SessionToken {
 
     private String ErrInvalidSession = "Invalid or expired session token";
@@ -16,8 +20,18 @@ public class SessionToken {
     private String hexString;
 
     //TODO: Find better storage place for tokens
-    public HashMap<String, LocalDateTime> sessionTokens = new HashMap<>();
+    public HashMap<SecretKey, LocalDateTime> sessionTokens = new HashMap<>();
 
+    public String keyToString(SecretKey token)
+    {
+        return Base64.getEncoder().encodeToString(token.getEncoded());
+    }
+
+    public SecretKey stringToKey(String token)
+    {
+        byte[] decodedKey = Base64.getDecoder().decode(token);
+        return originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+    }
 
     public SessionToken()
     {
@@ -25,7 +39,9 @@ public class SessionToken {
 
     public boolean tokenExists(String sessionToken)
     {
-        if (sessionTokens.containsKey(sessionToken))
+        SecretKey key = this.stringToKey(sessionToken);
+
+        if (sessionTokens.containsKey(key))
         {
             return true;
         }
@@ -40,9 +56,11 @@ public class SessionToken {
      */
     public boolean isTokenValid(String sessionToken)
     {
-        if(sessionTokens.containsKey(sessionToken))
+        SecretKey key = this.stringToKey(sessionToken);
+
+        if(sessionTokens.containsKey(key))
         {
-            LocalDateTime tokenTime = sessionTokens.get(sessionToken);
+            LocalDateTime tokenTime = sessionTokens.get(key);
             LocalDateTime currentTime = LocalDateTime.now();
 
             //Find the time between when the token was generated an the current time 
@@ -53,7 +71,7 @@ public class SessionToken {
                 return true;
             }
             else{
-                sessionTokens.remove(sessionToken); //Remove the expired sessionToken
+                sessionTokens.remove(key); //Remove the expired sessionToken
                 return false;
             }
         }
@@ -72,10 +90,14 @@ public class SessionToken {
     public String createSessionToken(String username)
     {
         //The sessionToken is a randomly generated string and a username
-        String sessionToken = generateToken() + username; 
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecureRandom secureRandom = new SecureRandom();
+        keyGenerator.init(1024, secureRandom);
+        SecretKey sessionToken = keyGenerator.generateKey();
+
         sessionTokens.put(sessionToken, LocalDateTime.now());
 
-        return sessionToken;
+        return this.keyToString(sessionToken);
     }
 
     
@@ -87,51 +109,11 @@ public class SessionToken {
     {
         if (this.isTokenValid(token))
         {
-            sessionTokens.remove(token);
+            sessionTokens.remove(this.stringToKey(token));
         }
     }
 
-    
-    /** 
-     * @return Returns a token for the session token 
-     */
-    private byte[] generateToken()
-    {
-        random = new SecureRandom();
-        stringBytes = new byte[8];
-        random.nextBytes(stringBytes);
 
-        return stringBytes;
-        //return this.bytesToString(stringBytes);
-    }
-
-    
-    /** 
-     * @param bytes
-     * @return A string
-     */
-    private String bytesToString(byte[] bytes)
-    {
-        stringBuffer = new StringBuffer();
-        for (byte b : bytes) 
-        {
-            hexString = Integer.toHexString(0xff & b);
-            if (hexString.length() == 1)
-            {
-                stringBuffer.append('0');
-            }
-            stringBuffer.append(hexString);
-        }      
-        return stringBuffer.toString();
-    }
-
-    private String btoString(byte[] bytes)
-    {
-        java.util.Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
-        return encoder.encodeToString(bytes);
-    }
-
-    
     /*public static void main(String[] args) 
     {
         SessionToken s = new SessionToken();

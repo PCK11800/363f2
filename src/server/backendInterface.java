@@ -1,4 +1,15 @@
-public interface backendInterface extends java.rmi.Remote{
+import java.security.PublicKey;
+
+public interface backendInterface extends java.rmi.Remote {
+
+    //Generate server keys
+    public void generateServerKeys() throws java.rmi.RemoteException;
+
+    //Generate server keys
+    public PublicKey getServerPublic() throws java.rmi.RemoteException;
+
+    //Sending the encrypted session key to the server
+    public void sendSessionKey(byte[] encryptedKey) throws java.rmi.RemoteException;
 
     //Takes a users login details and returns if they are correct
     public boolean login(String userName, String password) throws java.rmi.RemoteException;
