@@ -47,6 +47,12 @@ public class TaskSelection extends JPanel {
         personalData.setBounds(490, 260, 300,50);
         personalData.setText("Personal Data");
         personalData.setFontSize(22);
+        personalData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.initPersonalData();
+            }
+        });
         add(personalData);
 
         accountManagement.setBounds(490, 320, 300, 50);

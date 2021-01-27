@@ -9,6 +9,8 @@ import java.awt.*;
 
 public class AppButton extends JButton {
 
+    private boolean noBorder = false;
+
     public AppButton()
     {
         initUI();
@@ -43,14 +45,23 @@ public class AppButton extends JButton {
                     setBackground(AppColors.BORDER);
                     setForeground(AppColors.BACKGROUND);
                     setBorder(BorderFactory.createLineBorder(AppColors.BORDER, 1));
+                    if(noBorder) {
+                        setBorder(BorderFactory.createEmptyBorder());
+                    }
                 } else if (getModel().isRollover()) {
                     setBackground(AppColors.BACKGROUND);
                     setForeground(AppColors.BORDER);
                     setBorder(BorderFactory.createLineBorder(AppColors.BORDER, 1));
+                    if(noBorder) {
+                        setBorder(BorderFactory.createEmptyBorder());
+                    }
                 } else {
                     setBackground(AppColors.BACKGROUND);
                     setForeground(AppColors.BORDER);
                     setBorder(BorderFactory.createLineBorder(AppColors.BORDER, 1));
+                    if(noBorder) {
+                        setBorder(BorderFactory.createEmptyBorder());
+                    }
                 }
             }
         });
@@ -59,5 +70,11 @@ public class AppButton extends JButton {
     public void setFontSize(int size)
     {
         setFont(new Inconsolata().getFont(size));
+    }
+
+    public void removeBorder()
+    {
+        noBorder = true;
+        setBorder(BorderFactory.createEmptyBorder());
     }
 }

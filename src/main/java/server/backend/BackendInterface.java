@@ -10,4 +10,7 @@ public interface BackendInterface extends Remote {
 
     // Sends and returns an authentication code to user's email
     public int sendAuthenticationCode(String username) throws RemoteException;
+
+    // Data Retrieval Methods
+    public String[] getAllNames() throws RemoteException;
 }

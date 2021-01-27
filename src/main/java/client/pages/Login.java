@@ -158,8 +158,7 @@ public class Login extends JPanel {
         cancel_button.setFontSize(22);
         add(cancel_button);
 
-        //int finalAuthenticationCode = authenticationCode;
-        int finalAuthenticationCode = 0;
+        int finalAuthenticationCode = authenticationCode;
         confirmation_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

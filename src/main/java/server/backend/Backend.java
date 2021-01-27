@@ -1,6 +1,7 @@
 package server.backend;
 
 import server.credentials.SessionToken;
+import server.data.DataRetriever;
 import server.multifactor.MultifactorAuthenticator;
 import server.password.PasswordManager;
 
@@ -13,6 +14,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     //Assume it works for now
     //private PasswordManager passwordManager = new PasswordManager();
     private MultifactorAuthenticator mfa = new MultifactorAuthenticator();
+    private DataRetriever dataRetriever = new DataRetriever();
 
     public Backend() throws RemoteException {
         super();
@@ -30,5 +32,9 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         int code = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode(email, code);
         return code;
+    }
+
+    public String[] getAllNames() throws RemoteException {
+        return dataRetriever.getAllNames();
     }
 }

@@ -2,6 +2,7 @@ package client;
 
 import client.components.AppColors;
 import client.pages.Login;
+import client.pages.components.PersonalNamesList;
 import client.pages.TaskSelection;
 import server.backend.BackendInterface;
 
@@ -48,7 +49,7 @@ public class Client extends JFrame {
         getContentPane().setBackground(AppColors.BACKGROUND);
         getContentPane().setLayout(null);
 
-        initLogin();
+        initPersonalData();
     }
 
     Login login = new Login(this);
@@ -59,7 +60,6 @@ public class Client extends JFrame {
         login = new Login(this);
         add(login);
         currentPage = login;
-
         pack();
         repaint();
     }
@@ -72,6 +72,18 @@ public class Client extends JFrame {
         workpage = new TaskSelection(username, this);
         add(workpage);
         currentPage = workpage;
+        pack();
+        repaint();
+    }
+
+    PersonalNamesList personalNamesList;
+    public void initPersonalData()
+    {
+        resetPages();
+
+        personalNamesList = new PersonalNamesList(this, 200, 680);
+        add(personalNamesList);
+        currentPage = personalNamesList;
         pack();
         repaint();
     }
