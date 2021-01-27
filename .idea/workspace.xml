@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2843c92c-1127-46f0-95c8-ffe0afbfd6c3" name="Default Changelist" comment="" />
+    <list default="true" id="33756955-134a-4b2b-94b1-15cb6b4ac41f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,9 +17,6 @@
       </list>
     </option>
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -27,29 +24,34 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectId" id="1nFRQdIBq4PHZowUJo5lwx3FJXf" />
+  <component name="ProjectId" id="1neOnHdvqjkkGf6FqzRd7996ky1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/server/password" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="server" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\PCK11800\Documents\GitHub\363f2\src\client" />
+      <recent name="C:\Users\PCK11800\Desktop\Year 3 University\SCC300\363f2\src\main\resources\fonts" />
+      <recent name="C:\Users\PCK11800\Desktop\Year 3 University\SCC300\363f2\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="client.components.font" />
+      <recent name="client.components" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\PCK11800\Desktop\Year 3 University\SCC300\363f2\src\main\java\server\password" />
+      <recent name="C:\Users\PCK11800\Desktop\Year 3 University\SCC300\363f2\src\main\resources\password" />
+      <recent name="C:\Users\PCK11800\Desktop\Year 3 University\SCC300\363f2\src\main\java\client" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="client.Main" />
+  <component name="RunManager" selected="Application.PasswordManager">
+    <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="client.Client" />
       <module name="363f2" />
       <extension name="coverage">
         <pattern>
@@ -61,12 +63,25 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MultifactorAuthenticator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="server.MultifactorAuthenticator" />
+    <configuration name="PasswordManager" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="server.password.PasswordManager" />
       <module name="363f2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="server.*" />
+          <option name="PATTERN" value="server.password.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="server.Server" />
+      <module name="363f2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="server.password.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -76,74 +91,59 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="Application.MultifactorAuthenticator" />
+        <item itemvalue="Application.PasswordManager" />
+        <item itemvalue="Application.Server" />
+        <item itemvalue="Application.Client" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="2843c92c-1127-46f0-95c8-ffe0afbfd6c3" name="Default Changelist" comment="" />
-      <created>1610983837235</created>
+      <changelist id="33756955-134a-4b2b-94b1-15cb6b4ac41f" name="Default Changelist" comment="" />
+      <created>1611747254356</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1610983837235</updated>
+      <updated>1611747254356</updated>
     </task>
     <servers />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
-  </component>
   <component name="WindowStateProjectService">
-    <state x="440" y="94" key="#Project_Structure" timestamp="1611060548909">
+    <state x="406" y="252" key="#com.intellij.ide.util.MemberChooser" timestamp="1611755124643">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="94" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1611060548909" />
-    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610984925896">
+    <state x="406" y="252" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1611755124643" />
+    <state x="243" y="293" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1611761262777">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610984925896" />
-    <state x="681" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1610984572178">
+    <state x="243" y="293" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611761262777" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1611754342454">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="681" y="209" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610984572178" />
-    <state x="651" y="444" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1610984896895">
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1611754342454" />
+    <state width="1877" height="321" key="GridCell.Tab.0.bottom" timestamp="1611761744819">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="651" y="444" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1610984896895" />
-    <state x="756" y="427" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1610985236474">
+    <state width="1877" height="321" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
+    <state width="1877" height="321" key="GridCell.Tab.0.center" timestamp="1611761744819">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="756" y="427" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.0.1920.1040@0.0.1920.1040" timestamp="1610985236474" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1610988168658">
+    <state width="1877" height="321" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
+    <state width="1877" height="321" key="GridCell.Tab.0.left" timestamp="1611761744819">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1610988168658" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1610988168658">
+    <state width="1877" height="321" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
+    <state width="1877" height="321" key="GridCell.Tab.0.right" timestamp="1611761744819">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1610988168658" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1610988168658">
+    <state width="1877" height="321" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1611761744819" />
+    <state x="577" y="341" key="chooseDestDirectoryDialog" timestamp="1611747892740">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1610988168658" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1610988168658">
+    <state x="577" y="341" key="chooseDestDirectoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611747892740" />
+    <state x="308" y="293" key="refactoring.ChangeSignatureDialog" timestamp="1611750300819">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1610988168658" />
-    <state x="440" y="94" key="SettingsEditor" timestamp="1610985055599">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1610985055599" />
+    <state x="308" y="293" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1611750300819" />
   </component>
 </project>
