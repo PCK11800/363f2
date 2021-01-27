@@ -57,7 +57,8 @@ public class PasswordManager{
             random.nextBytes(salt);
 
             byte[] hashedPassword = generateHash(newPassword, salt);
-            SaltHash newSh = new SaltHash(salt, hashedPassword);
+            int role = passwords.get(userName).getRole();
+            SaltHash newSh = new SaltHash(salt, hashedPassword, role);
             passwords.replace(userName, newSh);
             savePasswords();
             return true;
@@ -73,9 +74,20 @@ public class PasswordManager{
      * @param password - the password of the new user, as a string
      * @return a flag as to whether the addition of the new user was successful
      */
-    public boolean addNewUser(String userName, String password)
+    public boolean addNewUser(String userName, String password, String adminUserName, String adminPassword, int role)
     {
         try {
+            if(!checkIfPasswordIsCorrect(adminUserName, adminPassword) || !isPermitted(adminUserName, 7))
+            {
+                System.out.println("Un authorised user tried to create a new user");
+                return false;
+            }
+
+            if(role > 3 || role < 0)
+            {
+                System.out.println("That's not an existing role");
+                return false;
+            }
             if(passwords.containsKey(userName))
             {
                 System.out.println("That User Already Exists, so can't be added");
@@ -86,7 +98,7 @@ public class PasswordManager{
             random.nextBytes(salt);
 
             byte[] hashedPassword = generateHash(password, salt);
-            SaltHash sh = new SaltHash(salt, hashedPassword);
+            SaltHash sh = new SaltHash(salt, hashedPassword, role);
             passwords.put(userName, sh);
             savePasswords();
             System.out.println("Added user " + userName + " with the password " + password);
@@ -142,10 +154,10 @@ public class PasswordManager{
         }
     }
 
-    public boolean addPermission(String userName, int perm, String adminPass)
+    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass)
     {
         boolean success = false;
-        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        if(!checkIfPasswordIsCorrect(adminUserName, adminPass) || !isAdmin(adminUserName))
         {
             System.out.println("Non-Admin user tried to add a permission");
             return false;
@@ -163,10 +175,10 @@ public class PasswordManager{
         return success;
     }
 
-    public boolean removePermission(String userName, int perm, String adminPass)
+    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
     {
         boolean success = false;
-        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        if(!checkIfPasswordIsCorrect(adminUserName, adminPass) || !isAdmin(adminUserName))
         {
             System.out.println("Non-Admin user tried to remove a permission");
             return false;
@@ -228,6 +240,48 @@ public class PasswordManager{
             System.out.println("Password Load Failed: " + e);
             return new HashMap<String, SaltHash>();
         }
+    }
+
+    public int getRole(String userName)
+    {
+        if(passwords.containsKey(userName))
+        {
+            return passwords.get(userName).getRole();
+        }
+        return -1;
+    }
+
+    public boolean isAdmin(String userName)
+    {
+        if(passwords.containsKey(userName))
+        {
+            if(passwords.get(userName).getRole() == 3)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    {
+        if(!isPermitted(adminUserName, 8) || !checkIfPasswordIsCorrect(adminUserName, adminPassword))
+        {
+            System.out.println("Non authroised user tried to delete a users' profile");
+            return false;
+        }
+
+        if(passwords.containsKey(userName))
+        {
+            passwords.remove(userName);
+            System.out.println("User: " + userName + " deleted");
+            return true;
+        }
+        else
+        {
+            System.out.println("User tried to delete a non-existent user");
+        }
+        return false;
     }
 
 }
