@@ -6,8 +6,6 @@ import client.components.AppColors;
 import client.components.font.Inconsolata;
 import client.pages.components.Editor;
 import client.pages.components.NamesList;
-import client.pages.components.Person;
-import server.data.DataRetriever;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -194,7 +192,7 @@ public class DataEditor extends JPanel {
         savePerson.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createNewPerson();
+                savePerson();
                 namesList.refresh();
             }
         });
@@ -230,6 +228,18 @@ public class DataEditor extends JPanel {
     }
 
     private void createNewPerson()
+    {
+        name.setText("");
+        gender.setText("");
+        birthday.setText("");
+        age.setText("");
+        address.setText("");
+        email.setText("");
+        phoneNumber.setText("");
+        editor.getTextArea().setText("");
+    }
+
+    private void savePerson()
     {
         String[] newPerson = new String[8];
         newPerson[0] = name.getText();

@@ -38,7 +38,7 @@ public class TaskSelection extends JPanel {
 
     private void initTaskButtons()
     {
-        data.setBounds(490, 260, 300,50);
+        data.setBounds(490, 200, 300,50);
         data.setText("View/Edit Patients");
         data.setFontSize(22);
         data.addActionListener(new ActionListener() {
@@ -49,17 +49,17 @@ public class TaskSelection extends JPanel {
         });
         add(data);
 
-        accountManagement.setBounds(490, 320, 300, 50);
+        accountManagement.setBounds(490, 260, 300, 50);
         accountManagement.setText("Account Management");
         accountManagement.setFontSize(22);
         add(accountManagement);
 
-        assignPermissions.setBounds(490, 380, 300, 50);
+        assignPermissions.setBounds(490, 320, 300, 50);
         assignPermissions.setText("Assign Permissions");
         assignPermissions.setFontSize(22);
         add(assignPermissions);
 
-        logout.setBounds(565, 460, 150, 25);
+        logout.setBounds(565, 380, 150, 25);
         logout.setText("Logout");
         logout.setFontSize(16);
         logout.addActionListener(new ActionListener() {

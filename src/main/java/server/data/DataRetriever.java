@@ -50,7 +50,7 @@ public class DataRetriever {
         fileContent.put("doctorsNote", person[7]);
 
         try{
-            String mainPath = "data/patients" + fileName;
+            String mainPath = "data/patients/" + fileName;
             Files.write(Paths.get(mainPath), fileContent.toJSONString().getBytes());
             System.out.println(mainPath);
         } catch (IOException e) {
