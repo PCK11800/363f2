@@ -120,7 +120,7 @@ public class Login extends JPanel {
     AppButton cancel_button = new AppButton();
     private void initMultifactorAuthentication(String username)
     {
-        int authenticationCode = 0000000; //Default invalid - can't have 7 digit codes
+        String authenticationCode = "null"; //Default invalid - can't have 7 digit codes
         try
         {
             authenticationCode = client.bI().sendAuthenticationCode(username);
@@ -158,12 +158,12 @@ public class Login extends JPanel {
         cancel_button.setFontSize(22);
         add(cancel_button);
 
-        int finalAuthenticationCode = authenticationCode;
+        String finalAuthenticationCode = authenticationCode;
         confirmation_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int inputtedCode = Integer.parseInt(codeInput.getText());
-                if (inputtedCode == finalAuthenticationCode)
+                String inputtedCode = codeInput.getText();
+                if (inputtedCode.equals(finalAuthenticationCode))
                 {
                     System.out.println("Login successful");
                     removeAll();

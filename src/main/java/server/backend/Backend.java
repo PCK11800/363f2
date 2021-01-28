@@ -1,8 +1,8 @@
 package server.backend;
 
-import client.pages.components.Person;
 import server.data.DataRetriever;
 import server.multifactor.MultifactorAuthenticator;
+import server.password.PasswordManager;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     //Assume it works for now
-    //private PasswordManager passwordManager = new PasswordManager();
+    private PasswordManager passwordManager = new PasswordManager();
     private MultifactorAuthenticator mfa = new MultifactorAuthenticator();
     private DataRetriever dataRetriever = new DataRetriever();
 
@@ -19,15 +19,15 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     }
 
     public boolean login(String username, String password) throws RemoteException {
-        //boolean loginValid = passwordManager.checkIfPasswordIsCorrect(username, password);
-        //return loginValid;
+        boolean loginValid = passwordManager.checkIfPasswordIsCorrect(username, password);
+        return loginValid;
 
-        return true;
+        //return true;
     }
 
-    public int sendAuthenticationCode(String username) throws RemoteException {
+    public String sendAuthenticationCode(String username) throws RemoteException {
         String email = "chinkiu.pak@gmail.com"; //Retrieve user email
-        int code = mfa.generateAuthenticationCode();
+        String code = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode(email, code);
         return code;
     }

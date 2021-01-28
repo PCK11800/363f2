@@ -49,7 +49,7 @@ public class MultifactorAuthenticator {
                 });
     }
 
-    public void sendAuthenticationCode(String destinationEmail, int authenticationCode)
+    public void sendAuthenticationCode(String destinationEmail, String authenticationCode)
     {
         init();
         try
@@ -59,7 +59,7 @@ public class MultifactorAuthenticator {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinationEmail));
 
             message.setSubject("Authentication Code");
-            message.setText(Integer.toString(authenticationCode));
+            message.setText(authenticationCode);
 
             Transport.send(message);
             System.out.println("Message send successfully.");
@@ -69,18 +69,18 @@ public class MultifactorAuthenticator {
         }
     }
 
-    public int generateAuthenticationCode()
+    public String generateAuthenticationCode()
     {
         Random random = new Random();
         int code = random.nextInt(999999);
-        return code;
+        return String.format("%06d", code);
     }
 
     //Test
     public static void main(String[] args)
     {
         MultifactorAuthenticator mfa = new MultifactorAuthenticator();
-        int authenticationCode = mfa.generateAuthenticationCode();
+        String authenticationCode = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode("chinkiu.pak@gmail.com", authenticationCode);
     }
 }

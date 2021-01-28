@@ -3,8 +3,6 @@ package server.password;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
@@ -12,10 +10,13 @@ import java.util.HashMap;
 
 public class PasswordManager {
 
-    private HashMap<String, SaltHash> passwords = loadPasswords();
+    private HashMap<String, SaltHash> passwords;
     private String ADMIN_NAME = "ADMIN";
 
-    public PasswordManager(){}
+    public PasswordManager()
+    {
+        passwords = loadPasswords();
+    }
 
     /**
      * Generates a PBKE hash for the password and salt passed as parameters
@@ -129,7 +130,7 @@ public class PasswordManager {
     private boolean savePasswords()
     {
         try {
-            FileOutputStream FOS = new FileOutputStream(new File("Passwords.txt"));
+            FileOutputStream FOS = new FileOutputStream(new File("data/passwords/Passwords.txt"));
             ObjectOutputStream OOS = new ObjectOutputStream(FOS);
             OOS.writeObject(passwords);
             FOS.close();
@@ -220,13 +221,20 @@ public class PasswordManager {
     private HashMap<String, SaltHash> loadPasswords()
     {
         try {
-            URL res = getClass().getClassLoader().getResource("passwords/Passwords.txt");
-            File file = Paths.get(res.toURI()).toFile();
-            String absolutePath = file.getAbsolutePath();
-
-            FileInputStream FIS = new FileInputStream(new File(absolutePath));
-            ObjectInputStream OIS = new ObjectInputStream(FIS);
-            return (HashMap<String, SaltHash>) OIS.readObject();
+            String mainPath = "data/passwords/Passwords.txt";
+            File passwordFile = new File(mainPath);
+            if(passwordFile.exists())
+            {
+                FileInputStream FIS = new FileInputStream(new File(mainPath));
+                ObjectInputStream OIS = new ObjectInputStream(FIS);
+                HashMap<String, SaltHash> result;
+                result = (HashMap<String, SaltHash>) OIS.readObject();
+                return result;
+            }
+            else
+            {
+                return new HashMap<String, SaltHash>();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new HashMap<String, SaltHash>();
@@ -235,18 +243,7 @@ public class PasswordManager {
 
     public static void main(String[] args)
     {
-        try
-        {
-            URL res = PasswordManager.class.getClassLoader().getResource("passwords/Passwords.txt");
-            File file = Paths.get(res.toURI()).toFile();
-            String absolutePath = file.getAbsolutePath();
-
-            System.out.println(absolutePath);
-            FileInputStream FIS = new FileInputStream(new File(absolutePath));
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        PasswordManager pa = new PasswordManager();
+        pa.addNewUser("ADMIN", "password");
     }
 }

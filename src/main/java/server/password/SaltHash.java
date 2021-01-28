@@ -3,7 +3,7 @@ package server.password;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class SaltHash implements Serializable{
+public class SaltHash implements Serializable {
 
     private byte[] salt;
     private byte[] hash;

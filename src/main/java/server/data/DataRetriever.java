@@ -23,7 +23,7 @@ public class DataRetriever {
     public String[] getAllNames()
     {
         File file = null;
-        String mainPath = "data";
+        String mainPath = "data/patients";
         file = new File(mainPath);
         File[] listOfPersons = file.listFiles();
 
@@ -50,7 +50,7 @@ public class DataRetriever {
         fileContent.put("doctorsNote", person[7]);
 
         try{
-            String mainPath = "data/" + fileName;
+            String mainPath = "data/patients" + fileName;
             Files.write(Paths.get(mainPath), fileContent.toJSONString().getBytes());
             System.out.println(mainPath);
         } catch (IOException e) {
@@ -62,7 +62,6 @@ public class DataRetriever {
     {
         String fileName = name;
         JSONObject fileContent = (JSONObject) readJSON(fileName);
-        System.out.println(fileContent.get("name"));
 
         String[] person = new String[8];
         person[0] = (String) fileContent.get("name");
@@ -82,7 +81,7 @@ public class DataRetriever {
         JSONParser jsonParser = new JSONParser();
         Object object = null;
         try {
-            String mainPath = "data/" + fileName;
+            String mainPath = "data/patients/" + fileName;
             FileReader reader = new FileReader(mainPath);
             object = jsonParser.parse(reader);
             reader.close();
@@ -99,7 +98,7 @@ public class DataRetriever {
 
     public void deletePerson(String name)
     {
-        String mainPath = "data/" + name;
+        String mainPath = "data/patients/" + name;
         System.out.println(mainPath);
         File toBeDeleted = new File(mainPath);
         toBeDeleted.delete();
