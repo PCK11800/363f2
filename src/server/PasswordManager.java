@@ -211,9 +211,9 @@ public class PasswordManager{
         return false;
     }
 
-    public void clearPermissions(String userName, String adminPass)
+    public void clearPermissions(String userName, String adminUserName, String adminPass)
     {
-        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass) || !isAdmin(adminUserName))
         {
             System.out.println("Non-Admin user tried to clear a users permissions");
             return;
