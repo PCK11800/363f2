@@ -42,7 +42,7 @@ public class DataEditor extends JPanel {
     private NamesList namesList;
     private void initNamesList()
     {
-        namesList = new NamesList(this, 200, 680);
+        namesList = new NamesList(this, 200, 650);
         namesList.setLocation(0, 0);
         add(namesList);
     }
