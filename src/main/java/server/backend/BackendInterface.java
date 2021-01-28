@@ -1,5 +1,7 @@
 package server.backend;
 
+import client.pages.components.Person;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -13,4 +15,10 @@ public interface BackendInterface extends Remote {
 
     // Data Retrieval Methods
     public String[] getAllNames() throws RemoteException;
+
+    public String[] getPerson(String name) throws RemoteException;
+
+    public void storePerson(String[] person) throws RemoteException;
+
+    public void deletePerson(String name) throws RemoteException;
 }

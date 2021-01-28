@@ -1,13 +1,11 @@
 package server.backend;
 
-import server.credentials.SessionToken;
+import client.pages.components.Person;
 import server.data.DataRetriever;
 import server.multifactor.MultifactorAuthenticator;
-import server.password.PasswordManager;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
 
 public class Backend extends UnicastRemoteObject implements BackendInterface {
 
@@ -37,4 +35,21 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     public String[] getAllNames() throws RemoteException {
         return dataRetriever.getAllNames();
     }
+
+    public String[] getPerson(String name) throws RemoteException
+    {
+        return dataRetriever.getPerson(name);
+    }
+
+    public void storePerson(String[] person) throws RemoteException
+    {
+        dataRetriever.storePerson(person);
+    }
+
+    public void deletePerson(String name) throws RemoteException
+    {
+        System.out.println("Reached BACKEND");
+        dataRetriever.deletePerson(name);
+    }
+
 }

@@ -31,29 +31,23 @@ public class TaskSelection extends JPanel {
         initTaskButtons();
     }
 
-    private AppButton medicalData = new AppButton();
-    private AppButton personalData = new AppButton();
+    private AppButton data = new AppButton();
     private AppButton accountManagement = new AppButton();
     private AppButton assignPermissions = new AppButton();
     private AppButton logout = new AppButton();
 
     private void initTaskButtons()
     {
-        medicalData.setBounds(490, 200, 300,50);
-        medicalData.setText("Medical Data");
-        medicalData.setFontSize(22);
-        add(medicalData);
-
-        personalData.setBounds(490, 260, 300,50);
-        personalData.setText("Personal Data");
-        personalData.setFontSize(22);
-        personalData.addActionListener(new ActionListener() {
+        data.setBounds(490, 260, 300,50);
+        data.setText("View/Edit Patients");
+        data.setFontSize(22);
+        data.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initPersonalData();
+                client.initDataEditor(username);
             }
         });
-        add(personalData);
+        add(data);
 
         accountManagement.setBounds(490, 320, 300, 50);
         accountManagement.setText("Account Management");

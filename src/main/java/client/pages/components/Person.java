@@ -1,14 +1,23 @@
 package client.pages.components;
 
-public class Person {
+import java.io.Serializable;
 
+public class Person implements Serializable {
+
+    //Personal Data
     private String id;
     private String name;
     private String gender;
     private String birthday;
+    private String age;
     private String address;
     private String email;
     private String phoneNumber;
+
+
+    //Medical Data
+    private String doctorsNote;
+
 
     public String getName() {
         return name;
@@ -56,5 +65,21 @@ public class Person {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getDoctorsNote() {
+        return doctorsNote;
+    }
+
+    public void setDoctorsNote(String doctorsNote) {
+        this.doctorsNote = doctorsNote;
     }
 }
