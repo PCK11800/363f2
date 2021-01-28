@@ -141,9 +141,9 @@ public class Backend extends java.rmi.server.UnicastRemoteObject implements back
         return pM.isPermitted(userName, perm);
     }
 
-    public void clearPermissions(String userName, String adminPass)
+    public void clearPermissions(String userName, String adminUserName, String adminPass)
     {
-        pM.clearPermissions(userName, adminPass);
+        pM.clearPermissions(userName, adminUserName, adminPass);
     }
 
     public boolean deleteUser(String userName, String adminUserName, String adminPassword)
