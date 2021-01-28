@@ -36,7 +36,7 @@ public interface backendInterface extends java.rmi.Remote {
     public boolean isPermitted(String userName, int perm)
         throws java.rmi.RemoteException;
 
-    public void clearPermissions(String userName, String adminPass)
+    public void clearPermissions(String userName, String adminUserName, String adminPass)
         throws java.rmi.RemoteException;
     
     public boolean deleteUser(String userName, String adminUserName, String adminPassword)
