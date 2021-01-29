@@ -10,7 +10,7 @@ public class Server {
     public Server()
     {
         try{
-            System.setProperty("java.rmi.server.hostname","10.63.2.241");
+            //System.setProperty("java.rmi.server.hostname","10.63.2.241");
             LocateRegistry.createRegistry(1099);
             BackendInterface backendInterface = new Backend();
             Naming.rebind("rmi://localhost/1099", backendInterface);
