@@ -1,3 +1,5 @@
+package server.password;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 

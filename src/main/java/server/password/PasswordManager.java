@@ -1,3 +1,5 @@
+package server.password;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;;
@@ -107,6 +109,18 @@ public class PasswordManager{
             System.out.println("Adding new user failed: " + e);
             return false;
         }
+    }
+
+    public void addNewUser(String userName, String password, int role)
+    {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        byte[] hashedPassword = generateHash(password, salt);
+        SaltHash sh = new SaltHash(salt, hashedPassword, role);
+        passwords.put(userName, sh);
+        savePasswords();
     }
 
     /**
@@ -305,8 +319,7 @@ public class PasswordManager{
     public static void main(String[] args)
     {
         PasswordManager pa = new PasswordManager();
-        pa.addNewUser("ADMIN", "password");
+        pa.addNewUser(pa.ADMIN_NAME, "password", 0);
     }
 }
 
-}
