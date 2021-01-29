@@ -1,22 +1,22 @@
-package server.password;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.io.*;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.*;
+import java.security.spec.*;
 import java.util.HashMap;
-
-public class PasswordManager {
-
-    private HashMap<String, SaltHash> passwords;
+import java.util.*;
+import javax.crypto.*;
+import javax.crypto.spec.PBEKeySpec;
+import javax.imageio.stream.FileImageInputStream;
+public class PasswordManager{
+    private HashMap<String, SaltHash> passwords = loadPasswords();
     private String ADMIN_NAME = "ADMIN";
 
-    public PasswordManager()
-    {
-        passwords = loadPasswords();
-    }
+
+    public PasswordManager(){}
 
     /**
      * Generates a PBKE hash for the password and salt passed as parameters
@@ -57,7 +57,8 @@ public class PasswordManager {
             random.nextBytes(salt);
 
             byte[] hashedPassword = generateHash(newPassword, salt);
-            SaltHash newSh = new SaltHash(salt, hashedPassword);
+            int role = passwords.get(userName).getRole();
+            SaltHash newSh = new SaltHash(salt, hashedPassword, role);
             passwords.replace(userName, newSh);
             savePasswords();
             return true;
@@ -69,13 +70,24 @@ public class PasswordManager {
 
     /**
      * Adds a new user to the password store
-     * @param userName - the username of the new user, as a string
+     * @param userName - the username of the new user, as a string 
      * @param password - the password of the new user, as a string
      * @return a flag as to whether the addition of the new user was successful
      */
-    public boolean addNewUser(String userName, String password)
+    public boolean addNewUser(String userName, String password, String adminUserName, String adminPassword, int role)
     {
         try {
+            if(!checkIfPasswordIsCorrect(adminUserName, adminPassword) || !isPermitted(adminUserName, 7))
+            {
+                System.out.println("Un authorised user tried to create a new user");
+                return false;
+            }
+
+            if(role > 3 || role < 0)
+            {
+                System.out.println("That's not an existing role");
+                return false;
+            }
             if(passwords.containsKey(userName))
             {
                 System.out.println("That User Already Exists, so can't be added");
@@ -86,7 +98,7 @@ public class PasswordManager {
             random.nextBytes(salt);
 
             byte[] hashedPassword = generateHash(password, salt);
-            SaltHash sh = new SaltHash(salt, hashedPassword);
+            SaltHash sh = new SaltHash(salt, hashedPassword, role);
             passwords.put(userName, sh);
             savePasswords();
             System.out.println("Added user " + userName + " with the password " + password);
@@ -141,11 +153,11 @@ public class PasswordManager {
             return false;
         }
     }
-
-    public boolean addPermission(String userName, int perm, String adminPass)
+    
+    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass)
     {
         boolean success = false;
-        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        if(!checkIfPasswordIsCorrect(adminUserName, adminPass) || !isAdmin(adminUserName))
         {
             System.out.println("Non-Admin user tried to add a permission");
             return false;
@@ -163,10 +175,10 @@ public class PasswordManager {
         return success;
     }
 
-    public boolean removePermission(String userName, int perm, String adminPass)
+    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
     {
         boolean success = false;
-        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        if(!checkIfPasswordIsCorrect(adminUserName, adminPass) || !isAdmin(adminUserName))
         {
             System.out.println("Non-Admin user tried to remove a permission");
             return false;
@@ -199,9 +211,9 @@ public class PasswordManager {
         return false;
     }
 
-    public void clearPermissions(String userName, String adminPass)
+    public void clearPermissions(String userName, String adminUserName, String adminPass)
     {
-        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass))
+        if(!checkIfPasswordIsCorrect(ADMIN_NAME, adminPass) || !isAdmin(adminUserName))
         {
             System.out.println("Non-Admin user tried to clear a users permissions");
             return;
@@ -214,6 +226,55 @@ public class PasswordManager {
         }
     }
 
+    public int getRole(String userName)
+    {
+        if(passwords.containsKey(userName))
+        {
+            return passwords.get(userName).getRole();
+        }
+        return -1;
+    }
+
+    public boolean isAdmin(String userName)
+    {
+        if(passwords.containsKey(userName))
+        {
+            if(passwords.get(userName).getRole() == 3)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    {
+        if(!isPermitted(adminUserName, 8) || !checkIfPasswordIsCorrect(adminUserName, adminPassword))
+        {
+            System.out.println("Non authroised user tried to delete a users' profile");
+            return false;
+        }
+
+        if(passwords.containsKey(userName))
+        {
+            passwords.remove(userName);
+            System.out.println("User: " + userName + " deleted");
+            return true;
+        }
+        else
+        {
+            System.out.println("User tried to delete a non-existent user");
+        }
+        return false;
+    }
+
+    public LinkedList<String> getAllUsers()
+    {
+        LinkedList<String> users = new LinkedList<>();
+        passwords.forEach((k, v) -> users.add(k));
+        return users;
+    }
+    
     /**
      * Loads the previously saved passwords hashmap
      * @return The previously saved passwords hashmap, if there hasn't been one saved then a new empty hashmap will be returned
@@ -246,4 +307,6 @@ public class PasswordManager {
         PasswordManager pa = new PasswordManager();
         pa.addNewUser("ADMIN", "password");
     }
+}
+
 }
