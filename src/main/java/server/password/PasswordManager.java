@@ -111,6 +111,11 @@ public class PasswordManager{
         }
     }
 
+    /**
+     * THIS IS FOR DEBUGGING PURPOSE ONLY!
+     * USE THIS IN THE MAIN METHOD BELOW TO GENERATE A NEW PASSWORD.TXT FILE
+     * IF ERRORS ARE FOUND.
+     */
     public void addNewUser(String userName, String password, int role)
     {
         SecureRandom random = new SecureRandom();
