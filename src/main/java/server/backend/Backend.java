@@ -10,7 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     //Assume it works for now
-    private PasswordManager passwordManager = new PasswordManager();
+    private PasswordManager pM = new PasswordManager();
     private MultifactorAuthenticator mfa = new MultifactorAuthenticator();
     private DataRetriever dataRetriever = new DataRetriever();
 
@@ -19,7 +19,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     }
 
     public boolean login(String username, String password) throws RemoteException {
-        boolean loginValid = passwordManager.checkIfPasswordIsCorrect(username, password);
+        boolean loginValid = pM.checkIfPasswordIsCorrect(username, password);
         return loginValid;
 
         //return true;
@@ -45,11 +45,57 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     {
         dataRetriever.storePerson(person);
     }
-
+    //There are two methods for deleting users, which is best can be decided on monday
     public void deletePerson(String name) throws RemoteException
     {
         System.out.println("Reached BACKEND");
         dataRetriever.deletePerson(name);
     }
+    
+    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    {
+        return pM.deleteUser(userName, adminUserName, adminPassword);
+    }
+    
+    public boolean newAccount(String userName, String password, String adminUserName, String adminPassword, int role)
+    {
+        return pM.addNewUser(userName, password, adminUserName, adminPassword, role);
+    }
+    
+    public boolean changePassword(String userName, String password, String oldPassword)
+    {
+        return pM.changePassword(userName, password, oldPassword);
+    }
+    
+    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass)
+    {
+        return pM.addPermission(userName, perm, adminUserName, adminPass);
+    }
+    
+    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
+    {
+        return pM.removePermission(userName, perm, adminUserName, adminPass);
+    }
+
+    public boolean isPermitted(String userName, int perm)
+    {
+        return pM.isPermitted(userName, perm);
+    }
+
+    public void clearPermissions(String userName, String adminUserName, String adminPass)
+    {
+        pM.clearPermissions(userName, adminUserName, adminPass);
+    }
+    
+    public int getRole(String userName)
+    {
+        return pM.getRole(userName);
+    }
+    
+    //public LinkedList<String> getAllUsers()
+    //{
+    //    return pM.getAllUsers();
+    //}
+
 
 }
