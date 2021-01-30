@@ -57,6 +57,12 @@ public class TaskSelection extends JPanel {
         assignPermissions.setBounds(490, 320, 300, 50);
         assignPermissions.setText("Assign Permissions");
         assignPermissions.setFontSize(22);
+        assignPermissions.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.initPermissions(username);
+            }
+        });
         add(assignPermissions);
 
         logout.setBounds(565, 380, 150, 25);

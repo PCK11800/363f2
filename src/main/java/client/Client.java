@@ -3,6 +3,7 @@ package client;
 import client.components.AppColors;
 import client.pages.DataEditor;
 import client.pages.Login;
+import client.pages.Permissions;
 import client.pages.TaskSelection;
 import server.backend.BackendInterface;
 
@@ -50,6 +51,8 @@ public class Client extends JFrame {
         getContentPane().setLayout(null);
 
         initLogin();
+        //initPermissions("ADMIN");
+        //initDataEditor("ADMIN");
     }
 
     Login login = new Login(this);
@@ -86,6 +89,19 @@ public class Client extends JFrame {
         dataEditor = new DataEditor(username, this);
         add(dataEditor);
         currentPage = dataEditor;
+
+        pack();
+        repaint();
+    }
+
+    Permissions permissions;
+    public void initPermissions(String username)
+    {
+        resetPages();
+
+        permissions = new Permissions(username, this);
+        add(permissions);
+        currentPage = permissions;
 
         pack();
         repaint();

@@ -1,12 +1,9 @@
 package client.pages.components;
 
-import client.Client;
 import client.components.AppButton;
 import client.components.AppColors;
 import client.components.font.Inconsolata;
-import client.pages.DataEditor;
-import client.pages.components.ButtonWindow;
-import server.data.DataRetriever;
+import client.pages.Permissions;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -15,24 +12,18 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class NamesList extends JPanel {
+public class UsersList extends JPanel {
 
-    private DataEditor dataEditor;
+    private Permissions permissions;
     private int width, height;
 
-    public NamesList(DataEditor dataEditor, int width, int height)
+    public UsersList(Permissions permissions, int width, int height)
     {
-        this.dataEditor = dataEditor;
+        this.permissions = permissions;
         this.width = width;
         this.height = height;
         initUI();
@@ -61,11 +52,14 @@ public class NamesList extends JPanel {
     JPanel listOfNamesPanel = new JPanel();
     String[] listOfNames = {};
     private void initPersonList() {
+
         try{
-            listOfNames = dataEditor.getClient().bI().getAllNames();
+            LinkedList<String> listOfNames_list = permissions.getClient().bI().getAllUsers();
+            listOfNames = listOfNames_list.toArray(new String[listOfNames_list.size()]);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
 
         listOfNamesPanel.setBounds(0, 0, width, height - 20);
         listOfNamesPanel.setLayout(new BoxLayout(listOfNamesPanel, BoxLayout.PAGE_AXIS));
@@ -172,23 +166,16 @@ public class NamesList extends JPanel {
             nameButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String[] person = null;
+                    int person = 0;
                     try {
-                        person = dataEditor.getClient().bI().getPerson(nameButton.getText());
+                        person = permissions.getClient().bI().getRole(nameButton.getText());
                     } catch (RemoteException remoteException) {
                         remoteException.printStackTrace();
                     }
-                    dataEditor.populateFields(person);
+                    permissions.populateFields(nameButton.getText(), person);
                 }
             });
-
             listOfNamesPanel.add(nameButton);
         }
-    }
-
-    public void refresh()
-    {
-        initPersonList();
-        filter(filter.getText());
     }
 }

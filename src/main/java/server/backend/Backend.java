@@ -6,6 +6,7 @@ import server.password.PasswordManager;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.LinkedList;
 
 public class Backend extends UnicastRemoteObject implements BackendInterface {
 
@@ -92,10 +93,10 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         return pM.getRole(userName);
     }
     
-    //public LinkedList<String> getAllUsers()
-    //{
-    //    return pM.getAllUsers();
-    //}
+    public LinkedList<String> getAllUsers()
+    {
+        return pM.getAllUsers();
+    }
 
 
 }

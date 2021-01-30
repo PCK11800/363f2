@@ -2,6 +2,7 @@ package server.backend;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 
 public interface BackendInterface extends Remote {
 
@@ -41,7 +42,6 @@ public interface BackendInterface extends Remote {
     public int getRole(String userName)
         throws java.rmi.RemoteException;
 
-    //public LinkedList<String> getAllUsers()
-    //    throws java.rmi.RemoteException;
+    public LinkedList<String> getAllUsers() throws java.rmi.RemoteException;
 
 }
