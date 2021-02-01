@@ -6,16 +6,24 @@ import client.components.AppColors;
 import client.components.extras.GhostText;
 import client.components.extras.JTextFieldLimit;
 import client.components.font.Inconsolata;
+import server.credentials.EncryptSessionKey;
+import server.credentials.SessionToken;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 
 public class Login extends JPanel {
 
     private Client client;
-
+    private SessionToken token = new SessionToken();
     public Login(Client client)
     {
         this.client = client;
@@ -75,6 +83,7 @@ public class Login extends JPanel {
 
                     if(login_valid)
                     {
+                        credentialNegotiation(username);
                         initMultifactorAuthentication(username);
                     }
                     else
@@ -89,6 +98,32 @@ public class Login extends JPanel {
         });
 
         add(login_button);
+    }
+
+    private void credentialNegotiation(String username)
+    {
+        try {
+            PublicKey serverPublic = client.bI().getServerPublic();
+            String sessionKey = token.createSessionToken(username);
+
+            //encrypt session key with server's public key
+            EncryptSessionKey encryptSessionKey = new EncryptSessionKey(serverPublic);
+
+            //send encrypted key to server and server decrypts the session key with private key
+            client.bI().sendSessionKey(encryptSessionKey.encryptSessionKey(sessionKey));
+
+        } catch (RemoteException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void setFieldSettings(JTextField textField)

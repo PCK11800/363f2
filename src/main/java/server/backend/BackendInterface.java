@@ -1,10 +1,26 @@
 package server.backend;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.util.LinkedList;
 
 public interface BackendInterface extends Remote {
+
+    //Generate server keys
+    public void generateServerKeys() throws java.rmi.RemoteException;
+
+    //Generate server keys
+    public PublicKey getServerPublic() throws java.rmi.RemoteException;
+
+    //Sending the encrypted session key to the server
+    public void sendSessionKey(byte[] encryptedKey) throws java.rmi.RemoteException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException;
+
 
     // Returns if login is valid.
     public boolean login(String username, String password) throws RemoteException;
