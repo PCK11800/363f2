@@ -83,7 +83,7 @@ public class Login extends JPanel {
 
                     if(login_valid)
                     {
-                        credentialNegotiation(username);
+                        //credentialNegotiation(username);
                         initMultifactorAuthentication(username);
                     }
                     else
