@@ -14,6 +14,7 @@ public class Server {
             LocateRegistry.createRegistry(1099);
             BackendInterface backendInterface = new Backend();
             Naming.rebind("rmi://localhost/1099", backendInterface);
+            backendInterface.generateServerKeys();
         } catch (Exception e) {
             e.printStackTrace();
         }
