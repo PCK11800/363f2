@@ -114,47 +114,47 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         dataRetriever.deletePerson(name);
     }
     
-    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    public boolean deleteUser(String userName, String adminUserName, String adminPassword) throws RemoteException
     {
         return pM.deleteUser(userName, adminUserName, adminPassword);
     }
     
-    public boolean newAccount(String userName, String password, String adminUserName, String adminPassword, int role)
+    public boolean newAccount(String userName, String password, String adminUserName, String adminPassword, int role) throws RemoteException
     {
         return pM.addNewUser(userName, password, adminUserName, adminPassword, role);
     }
     
-    public boolean changePassword(String userName, String password, String oldPassword)
+    public boolean changePassword(String userName, String password, String oldPassword) throws RemoteException
     {
         return pM.changePassword(userName, password, oldPassword);
     }
     
-    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass)
+    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
     {
         return pM.addPermission(userName, perm, adminUserName, adminPass);
     }
     
-    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
+    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
     {
         return pM.removePermission(userName, perm, adminUserName, adminPass);
     }
 
-    public boolean isPermitted(String userName, int perm)
+    public boolean isPermitted(String userName, int perm) throws RemoteException
     {
         return pM.isPermitted(userName, perm);
     }
 
-    public void clearPermissions(String userName, String adminUserName, String adminPass)
+    public void clearPermissions(String userName, String adminUserName, String adminPass) throws RemoteException
     {
         pM.clearPermissions(userName, adminUserName, adminPass);
     }
     
-    public int getRole(String userName)
+    public int getRole(String userName) throws RemoteException
     {
         return pM.getRole(userName);
     }
     
-    public LinkedList<String> getAllUsers()
+    public LinkedList<String> getAllUsers() throws RemoteException
     {
         return pM.getAllUsers();
     }
