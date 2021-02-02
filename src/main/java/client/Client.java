@@ -15,6 +15,7 @@ public class Client extends JFrame {
 
     private BackendInterface bI;
     private JPanel currentPage = null;
+    private String password = "";
 
     int APP_WIDTH = 1280;
     int APP_HEIGHT = 720;
@@ -119,6 +120,14 @@ public class Client extends JFrame {
     public BackendInterface bI()
     {
         return bI;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public String getPassword(){
+        return password;
     }
 
     public static void main(String[] args)
