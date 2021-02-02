@@ -1,3 +1,5 @@
+package server.Log;
+
 import java.util.LinkedList;
 import java.security.MessageDigest;
 import java.util.*;

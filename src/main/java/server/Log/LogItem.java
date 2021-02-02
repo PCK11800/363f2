@@ -1,3 +1,5 @@
+package server.Log;
+
 import java.io.Serializable;
 
 public class LogItem implements Serializable{
