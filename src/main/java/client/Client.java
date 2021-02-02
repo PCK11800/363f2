@@ -51,9 +51,9 @@ public class Client extends JFrame {
         getContentPane().setBackground(AppColors.BACKGROUND);
         getContentPane().setLayout(null);
 
-        initLogin();
+        //initLogin();
         //initPermissions("ADMIN");
-        //initDataEditor("ADMIN");
+        initDataEditor("ADMIN");
     }
 
     Login login = new Login(this);

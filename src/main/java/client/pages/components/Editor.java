@@ -82,6 +82,11 @@ public class Editor extends JPanel {
         add(scrollPane);
     }
 
+    public void disableEditor()
+    {
+        remove(scrollPane);
+    }
+
     public JTextArea getTextArea() {
         return textArea;
     }

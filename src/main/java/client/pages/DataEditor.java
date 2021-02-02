@@ -16,12 +16,22 @@ public class DataEditor extends JPanel {
 
     private Client client;
     private String username;
+    private int role = 0; //Default patient
     private String[] currentSelectedPerson = null;
 
     public DataEditor(String username, Client client)
     {
         this.client = client;
         this.username = username;
+
+        try{
+            role = client.bI().getRole(username);
+            //role = 3;
+        }catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+
         initUI();
         setVisible(true);
     }
@@ -117,10 +127,6 @@ public class DataEditor extends JPanel {
         address.setBounds(220, 390, 250, 200);
         addressLabel.setBounds(220, 360, 250, 40);
         add(addressLabel);
-        if(false) //If permission NOT granted
-        {
-            address.setEditable(false);
-        }
         address.setFont(new Inconsolata().getFont(18));
         address.setForeground(AppColors.BORDER);
         address.setBackground(AppColors.BACKGROUND);
@@ -129,14 +135,28 @@ public class DataEditor extends JPanel {
         address.setBorder(BorderFactory.createLineBorder(AppColors.BORDER, 2));
         address.setLineWrap(true);
         add(address);
+
+        //Patient
+        if(role == 0)
+        {
+            name.setEditable(false);
+        }
+        //Staff & Regulator
+        if(role == 1 || role == 2)
+        {
+            name.setEditable(false);
+            gender.setEditable(false);
+            birthday.setEditable(false);
+            age.setEditable(false);
+            address.setEditable(false);
+            email.setEditable(false);
+            phoneNumber.setEditable(false);
+            address.setEnabled(false);
+        }
     }
 
     private void setFieldSettings(JTextField textField)
     {
-        if(false)//If permission NOT granted
-        {
-            textField.setEditable(false);
-        }
         textField.setForeground(AppColors.BORDER);
         textField.setBackground(AppColors.BACKGROUND);
         textField.setSelectedTextColor(AppColors.BACKGROUND);
@@ -157,16 +177,23 @@ public class DataEditor extends JPanel {
     private void initMedicalField()
     {
         editor = new Editor(490, 30, 750, 560);
-        if(false)//If permission NOT granted
-        {
-            editor.getTextArea().setEditable(false);
-        }
         add(editor);
 
         editorLabel = new JLabel("Doctor's Note");
         setLabelSettings(editorLabel);
         editorLabel.setBounds(490, 0, 250, 40);
         add(editorLabel);
+
+        //Patient & Regulator
+        if(role == 0 || role == 2)
+        {
+            editor.disableEditor();
+        }
+        //Staff
+        if(role == 1)
+        {
+            //Nothing
+        }
     }
 
     private AppButton addNewPerson, savePerson, deletePerson, goBack;
@@ -225,6 +252,20 @@ public class DataEditor extends JPanel {
             }
         });
         add(goBack);
+
+        //Patient & Staff
+        if(role == 0 || role == 1)
+        {
+            addNewPerson.setEnabled(false);
+            deletePerson.setEnabled(false);
+        }
+        //Regulator
+        if(role == 2)
+        {
+            addNewPerson.setEnabled(false);
+            savePerson.setEnabled(false);
+            deletePerson.setEnabled(false);
+        }
     }
 
     private void createNewPerson()
