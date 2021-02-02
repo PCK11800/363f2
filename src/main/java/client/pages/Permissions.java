@@ -10,17 +10,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.LinkedList;
 
 public class Permissions extends JPanel {
 
     private Client client;
     private String username;
+    private int userRole = -1;
     private String currentSelectedUser = null;
 
     public Permissions(String username, Client client)
     {
         this.client = client;
         this.username = username;
+        try{
+            userRole = client.bI().getRole(username);
+        } catch(Exception e){
+            System.out.println(e);
+        }
+
+
         initUI();
         setVisible(true);
     }
@@ -58,46 +68,52 @@ public class Permissions extends JPanel {
         add(usersList);
     }
 
-    private JCheckBox viewPersonalData, viewDoctorsNote, editPersonalData, editDoctorsNote
-            , addPatient, deletePatient, createAccounts, deleteAccounts;
+    private JCheckBox viewPersonalData, viewAllData, editPersonalData, editAllData
+            , addDoctorsNote, deleteDoctorsNotes, createAccounts, deleteAccounts;
     private void initPermissionsFields()
     {
+
         viewPersonalData = new JCheckBox();
         viewPersonalData.setBounds(320, 150, 250, 30);
         viewPersonalData.setText("View Personal Data");
         setCheckBoxSettings(viewPersonalData);
         add(viewPersonalData);
 
-        viewDoctorsNote = new JCheckBox();
-        viewDoctorsNote.setBounds(320, 250, 250, 30);
-        viewDoctorsNote.setText("View Doctors Note");
-        setCheckBoxSettings(viewDoctorsNote);
-        add(viewDoctorsNote);
+        if(userRole == 1 || userRole == 2 || userRole == 3) {
+            viewAllData = new JCheckBox();
+            viewAllData.setBounds(320, 250, 250, 30);
+            viewAllData.setText("View All Data");
+            setCheckBoxSettings(viewAllData);
+            add(viewAllData);
+        }
 
-        editPersonalData = new JCheckBox();
-        editPersonalData.setBounds(320, 350, 250, 30);
-        editPersonalData.setText("Edit Personal Data");
-        setCheckBoxSettings(editPersonalData);
-        add(editPersonalData);
+        if(userRole == 1 || userRole == 3) {
+            editPersonalData = new JCheckBox();
+            editPersonalData.setBounds(320, 350, 250, 30);
+            editPersonalData.setText("Edit Personal Data");
+            setCheckBoxSettings(editPersonalData);
+            add(editPersonalData);
 
-        editDoctorsNote = new JCheckBox();
-        editDoctorsNote.setBounds(320, 450, 250, 30);
-        editDoctorsNote.setText("Edit Doctors Note");
-        setCheckBoxSettings(editDoctorsNote);
-        add(editDoctorsNote);
+            editAllData = new JCheckBox();
+            editAllData.setBounds(320, 450, 250, 30);
+            editAllData.setText("Edit All Data");
+            setCheckBoxSettings(editAllData);
+            add(editAllData);
 
-        addPatient = new JCheckBox();
-        addPatient.setBounds(820, 150, 250, 30);
-        addPatient.setText("Add Patient");
-        setCheckBoxSettings(addPatient);
-        add(addPatient);
+            addDoctorsNote = new JCheckBox();
+            addDoctorsNote.setBounds(820, 150, 250, 30);
+            addDoctorsNote.setText("Add Doctors Note");
+            setCheckBoxSettings(addDoctorsNote);
+            add(addDoctorsNote);
 
-        deletePatient = new JCheckBox();
-        deletePatient.setBounds(820, 250, 250, 30);
-        deletePatient.setText("Delete Patient");
-        setCheckBoxSettings(deletePatient);
-        add(deletePatient);
+            deleteDoctorsNotes = new JCheckBox();
+            deleteDoctorsNotes.setBounds(820, 250, 250, 30);
+            deleteDoctorsNotes.setText("Delete Doctors Notes");
+            setCheckBoxSettings(deleteDoctorsNotes);
+            add(deleteDoctorsNotes);
+        }
 
+        /*
         createAccounts = new JCheckBox();
         createAccounts.setBounds(820, 350, 250, 30);
         createAccounts.setText("Create Accounts");
@@ -109,6 +125,7 @@ public class Permissions extends JPanel {
         deleteAccounts.setText("Delete Accounts");
         setCheckBoxSettings(deleteAccounts);
         add(deleteAccounts);
+         */
     }
 
     private void setCheckBoxSettings(JCheckBox checkBox)
@@ -143,7 +160,58 @@ public class Permissions extends JPanel {
         saveSettings.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Save role changes here
+                LinkedList<Integer> added = new LinkedList();
+                LinkedList<Integer> removed = new LinkedList();
+
+                if(viewPersonalData.isSelected()) {
+                    added.add(1);
+                } else{
+                    removed.add(1);
+                }
+
+                if(userRole == 1 || userRole == 2 || userRole == 3){
+                    if(viewAllData.isSelected()) {
+                        added.add(2);
+                    } else{
+                        removed.add(2);
+                    }
+                }
+
+                if(userRole == 1 || userRole == 3){
+                    if(editPersonalData.isSelected()) {
+                        added.add(3);
+                    } else{
+                        removed.add(3);
+                    }
+
+                    if(editAllData.isSelected()) {
+                        added.add(4);
+                    } else{
+                        removed.add(4);
+                    }
+
+                    if(addDoctorsNote.isSelected()) {
+                        added.add(5);
+                    } else{
+                        removed.add(5);
+                    }
+
+                    if(deleteDoctorsNotes.isSelected()) {
+                        added.add(6);
+                    } else{
+                        removed.add(6);
+                    }
+                }
+                try {
+                    for(int i: added){
+                        client.bI().addPermission(currentSelectedUser, i, username, client.getPassword());
+                    }
+                    for(int i: removed){
+                        client.bI().removePermission(currentSelectedUser, i, username, client.getPassword());
+                    }
+                } catch (RemoteException re) {
+                    re.printStackTrace();
+                }
             }
         });
         add(saveSettings);

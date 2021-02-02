@@ -84,6 +84,7 @@ public class Login extends JPanel {
                     if(login_valid)
                     {
                         //credentialNegotiation(username);
+                        client.setPassword(password);
                         initMultifactorAuthentication(username);
                     }
                     else
