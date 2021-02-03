@@ -82,6 +82,10 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     public boolean login(String username, String password) throws RemoteException {
         boolean loginValid = pM.checkIfPasswordIsCorrect(username, password);
+        if(!loginValid){
+            String email = "f2.scc363@gmail.com";//username;
+            mfa.failedLogInAttempt(email);
+        }
         return loginValid;
 
         //return true;
@@ -121,7 +125,11 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     
     public boolean newAccount(String userName, String password, String adminUserName, String adminPassword, int role) throws RemoteException
     {
-        return pM.addNewUser(userName, password, adminUserName, adminPassword, role);
+        boolean result =  pM.addNewUser(userName, password, adminUserName, adminPassword, role);
+        if(result) {
+            mfa.newAccount(userName);
+        }
+        return result;
     }
     
     public boolean changePassword(String userName, String password, String oldPassword) throws RemoteException
@@ -131,12 +139,22 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     
     public boolean addPermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
     {
-        return pM.addPermission(userName, perm, adminUserName, adminPass);
+        boolean result =  pM.addPermission(userName, perm, adminUserName, adminPass);
+        if(result) {
+            String email = "f2.scc363@gmail.com";//username;
+            mfa.permissionsUpdated(email);
+        }
+        return result;
     }
     
     public boolean removePermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
     {
-        return pM.removePermission(userName, perm, adminUserName, adminPass);
+        boolean result =  pM.removePermission(userName, perm, adminUserName, adminPass);
+        if(result) {
+            String email = "f2.scc363@gmail.com";//username;
+            mfa.permissionsUpdated(email);
+        }
+        return result;
     }
 
     public boolean isPermitted(String userName, int perm) throws RemoteException
