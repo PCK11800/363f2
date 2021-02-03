@@ -69,6 +69,69 @@ public class MultifactorAuthenticator {
         }
     }
 
+    public void failedLogInAttempt(String destinationEmail)
+    {
+        init();
+        try
+        {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinationEmail));
+
+            message.setSubject("ALERT - Log In attempt");
+            message.setText("An attempt was made to log in to your account. If this was not you please contact the administrator.");
+
+            Transport.send(message);
+            System.out.println("Failed log in message sent successfully.");
+
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+
+    public void permissionsUpdated(String destinationEmail)
+    {
+        init();
+        try
+        {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinationEmail));
+
+            message.setSubject("ALERT - Permissions updated");
+            message.setText("Your permissions have been updated. If you believe this to be a mistake, please contact the administrator.");
+
+            Transport.send(message);
+            System.out.println("Changed permissions message sent successfully.");
+
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+
+    public void newAccount(String destinationEmail)
+    {
+        init();
+        try
+        {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinationEmail));
+
+            message.setSubject("Welcome");
+            message.setText("A new account has been created using this email. " +
+                    "Your email is your account name, the system administrator will be in contact with your password. " +
+                    "Please update your password on your first time logging in." +
+                    "If you believe this to be a mistake, please contact the administrator.");
+
+            Transport.send(message);
+            System.out.println("New account message sent successfully.");
+
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+    }
+
     public String generateAuthenticationCode()
     {
         Random random = new Random();
