@@ -76,6 +76,21 @@ public class DataRetriever {
         return person;
     }
 
+    public String getNameFromEmail(String email)
+    {
+        String person_name = null;
+        for(String name : getAllNames())
+        {
+            String[] person = getPerson(name);
+            String person_email = (String) person[5];
+            if(person_email.equals(email))
+            {
+                person_name = person[0];
+            }
+        }
+        return person_name;
+    }
+
     private Object readJSON(String fileName)
     {
         JSONParser jsonParser = new JSONParser();

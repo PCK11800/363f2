@@ -7,6 +7,7 @@ import client.components.AppColors;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class TaskSelection extends JPanel {
 
@@ -52,6 +53,12 @@ public class TaskSelection extends JPanel {
         accountManagement.setBounds(490, 260, 300, 50);
         accountManagement.setText("Account Management");
         accountManagement.setFontSize(22);
+        accountManagement.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                client.initAccountManager(username);
+            }
+        });
         add(accountManagement);
 
         assignPermissions.setBounds(490, 320, 300, 50);
@@ -75,5 +82,14 @@ public class TaskSelection extends JPanel {
             }
         });
         add(logout);
+
+        try {
+            if(client.bI().getRole(username) != 3)
+            {
+                assignPermissions.setEnabled(false);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }

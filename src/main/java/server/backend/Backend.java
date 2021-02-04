@@ -2,6 +2,7 @@ package server.backend;
 
 import server.data.DataRetriever;
 import server.multifactor.MultifactorAuthenticator;
+import server.password.Evaluation;
 import server.password.PasswordManager;
 
 import javax.crypto.*;
@@ -20,6 +21,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     private PasswordManager pM = new PasswordManager();
     private MultifactorAuthenticator mfa = new MultifactorAuthenticator();
     private DataRetriever dataRetriever = new DataRetriever();
+    private Evaluation passwordEvaluator = new Evaluation();
 
     private PublicKey serverPublicKey;
     private PrivateKey serverPrivateKey;
@@ -92,14 +94,22 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     }
 
     public String sendAuthenticationCode(String username) throws RemoteException {
-        String email = "chinkiu.pak@gmail.com"; //Retrieve user email
+        String email = username; //Retrieve user email
         String code = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode(email, code);
         return code;
     }
 
-    public String[] getAllNames() throws RemoteException {
-        return dataRetriever.getAllNames();
+    public String[] getAllNames(String username) throws RemoteException {
+        if(!isPermitted(username, 5))
+        {
+            String[] names = {dataRetriever.getNameFromEmail(username)};
+            return names;
+        }
+        else
+        {
+            return dataRetriever.getAllNames();
+        }
     }
 
     public String[] getPerson(String name) throws RemoteException
@@ -118,14 +128,14 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         dataRetriever.deletePerson(name);
     }
     
-    public boolean deleteUser(String userName, String adminUserName, String adminPassword) throws RemoteException
+    public boolean deleteUser(String userName) throws RemoteException
     {
-        return pM.deleteUser(userName, adminUserName, adminPassword);
+        return pM.deleteUser(userName);
     }
     
-    public boolean newAccount(String userName, String password, String adminUserName, String adminPassword, int role) throws RemoteException
+    public boolean newAccount(String userName, String password, int role) throws RemoteException
     {
-        boolean result =  pM.addNewUser(userName, password, adminUserName, adminPassword, role);
+        boolean result =  pM.addNewUser(userName, password, role);
         if(result) {
             mfa.newAccount(userName);
         }
@@ -166,16 +176,24 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     {
         pM.clearPermissions(userName, adminUserName, adminPass);
     }
-    
+
     public int getRole(String userName) throws RemoteException
     {
         return pM.getRole(userName);
     }
-    
+
+    public boolean isPasswordValid(String username, String password) throws RemoteException {
+        return pM.checkIfPasswordIsCorrect(username, password);
+    }
+
+    @Override
+    public boolean isPasswordStrong(String password) throws RemoteException {
+        return passwordEvaluator.checkPasswordStrength(password);
+    }
+
     public LinkedList<String> getAllUsers() throws RemoteException
     {
         return pM.getAllUsers();
     }
-
 
 }
