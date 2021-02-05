@@ -51,7 +51,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
             X509Certificate certificate = generateCertificate(keyPair);
             Certificate[] chain = new Certificate[1];
             chain[0] = certificate;
-    
+
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(null, pass);
 
