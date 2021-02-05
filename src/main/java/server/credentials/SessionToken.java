@@ -22,7 +22,6 @@ public class SessionToken {
     private StringBuffer stringBuffer;
     private String hexString;
 
-    //TODO: Find better storage place for tokens
     public HashMap<SecretKey, LocalDateTime> sessionTokens = new HashMap<>();
 
     public String keyToString(SecretKey token)

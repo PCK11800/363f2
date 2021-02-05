@@ -26,7 +26,7 @@ public class Login extends JPanel {
 
     private Client client;
     private SessionToken token = new SessionToken();
-    private String sessionKey;
+    private String sessionKey = "";
 
     public Login(Client client)
     {
