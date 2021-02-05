@@ -10,6 +10,7 @@ import server.credentials.EncryptSessionKey;
 import server.credentials.SessionToken;
 
 import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
@@ -19,11 +20,14 @@ import java.rmi.RemoteException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.Base64;
 
 public class Login extends JPanel {
 
     private Client client;
     private SessionToken token = new SessionToken();
+    private String sessionKey;
+
     public Login(Client client)
     {
         this.client = client;
@@ -83,7 +87,8 @@ public class Login extends JPanel {
 
                     if(login_valid)
                     {
-                        //credentialNegotiation(username);
+                        credentialNegotiation(username);
+                        sendMessageToServer("Hi Server");
                         client.setPassword(password);
                         initMultifactorAuthentication(username);
                     }
@@ -101,11 +106,26 @@ public class Login extends JPanel {
         add(login_button);
     }
 
+    private void sendMessageToServer(String message)
+    {
+        byte[] messageBytes = message.getBytes();
+        try {
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, token.stringToKey(sessionKey));
+            final byte[] encValue = cipher.doFinal(message.getBytes());
+            String encrypted = Base64.getEncoder().encodeToString(encValue);
+            client.bI().exchangeMessages(encrypted);
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void credentialNegotiation(String username)
     {
         try {
             PublicKey serverPublic = client.bI().getServerPublic();
-            String sessionKey = token.createSessionToken(username);
+            this.sessionKey = token.createSessionTokenString(username);
 
             //encrypt session key with server's public key
             EncryptSessionKey encryptSessionKey = new EncryptSessionKey(serverPublic);
@@ -113,18 +133,9 @@ public class Login extends JPanel {
             //send encrypted key to server and server decrypts the session key with private key
             client.bI().sendSessionKey(encryptSessionKey.encryptSessionKey(sessionKey));
 
-        } catch (RemoteException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+        } catch (RemoteException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
         }
-
     }
 
     private void setFieldSettings(JTextField textField)

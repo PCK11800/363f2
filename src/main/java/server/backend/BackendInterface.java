@@ -12,6 +12,9 @@ import java.util.LinkedList;
 
 public interface BackendInterface extends Remote {
 
+    //Send messages
+    public void exchangeMessages(String encryptedMessage) throws java.rmi.RemoteException;
+
     //Generate server keys
     public void generateServerKeys() throws java.rmi.RemoteException;
 

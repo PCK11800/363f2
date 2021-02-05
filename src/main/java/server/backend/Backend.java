@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.*;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedList;
 
@@ -30,6 +31,20 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         super();
     }
 
+    public void exchangeMessages(String encryptedMessage) throws RemoteException
+    {
+        try {
+            Cipher c = Cipher.getInstance("AES");
+            c.init(Cipher.DECRYPT_MODE, sessionKey);
+            byte[] decryptedBytes = c.doFinal(Base64.getDecoder().decode(encryptedMessage));
+            String decrypted = new String(decryptedBytes);
+            System.out.println(decrypted);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void generateServerKeys() throws java.rmi.RemoteException
     {
         try (FileOutputStream fos = new FileOutputStream("keyS.ks");)
@@ -42,7 +57,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
             serverPrivateKey = keyPair.getPrivate();
 
             //TODO fix storage of private key
-
         /*
         char[] pass = "password".toCharArray();
         String alias = "privateKey";
@@ -73,8 +87,8 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     public void sendSessionKey(byte[] encryptedKey) throws java.rmi.RemoteException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, serverPrivateKey);
-        String session = String.valueOf(cipher.doFinal(encryptedKey));
-
+        byte[] decrypted = cipher.doFinal(encryptedKey);
+        String session = new String(decrypted);
         byte[] decodedKey = Base64.getDecoder().decode(session);
         sessionKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
     }

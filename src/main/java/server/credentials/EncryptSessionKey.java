@@ -3,6 +3,7 @@ package server.credentials;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -22,8 +23,10 @@ public class EncryptSessionKey {
     {
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, serverKey);
-        cipher.update(sessionToken.getBytes());
-        return cipher.doFinal();        
+        //cipher.update(sessionToken.getBytes());
+        byte [] encrypted = cipher.doFinal(sessionToken.getBytes());
+
+        return encrypted;
     }
     
 }

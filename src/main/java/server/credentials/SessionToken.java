@@ -90,7 +90,7 @@ public class SessionToken {
      * @param username The current users' username
      * @return The newly creatred session token
      */
-    public String createSessionToken(String username) throws NoSuchAlgorithmException {
+    public String createSessionTokenString(String username) throws NoSuchAlgorithmException {
         //The sessionToken is a randomly generated string and a username
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         SecureRandom secureRandom = new SecureRandom();
@@ -100,6 +100,18 @@ public class SessionToken {
         sessionTokens.put(sessionToken, LocalDateTime.now());
 
         return this.keyToString(sessionToken);
+    }
+
+    public SecretKey createSessionTokenKey(String username) throws NoSuchAlgorithmException {
+        //The sessionToken is a randomly generated string and a username
+        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+        SecureRandom secureRandom = new SecureRandom();
+        keyGenerator.init(128, secureRandom);
+        SecretKey sessionToken = keyGenerator.generateKey();
+
+        sessionTokens.put(sessionToken, LocalDateTime.now());
+
+        return sessionToken;
     }
 
 
