@@ -34,7 +34,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     public void generateServerKeys() throws java.rmi.RemoteException
     {
-        try (FileOutputStream fos = new FileOutputStream("keyS.ks");)
+        try (FileOutputStream fos = new FileOutputStream("data/keys/keyS.ks");)
         {
             KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");
             SecureRandom secureRandom = new SecureRandom();
@@ -45,19 +45,19 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
             //TODO fix storage of private key
 
-        /*
-        char[] pass = "password".toCharArray();
-        String alias = "privateKey";
-        X509Certificate certificate = generateCertificate(keyPair);
-        Certificate[] chain = new Certificate[1];
-        chain[0] = certificate;
+            /*
+            char[] pass = "password".toCharArray();
+            String alias = "privateKey";
+            X509Certificate certificate = generateCertificate(keyPair);
+            Certificate[] chain = new Certificate[1];
+            chain[0] = certificate;
+    
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, pass);
 
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(null, pass);
-
-        keyStore.setKeyEntry(alias, new KeyStore.SecretKeyEntry(keyPair.getPrivate), pass, chain);
-        keyStore.store(fos, pass);
-        */
+            keyStore.setKeyEntry(alias, new KeyStore.SecretKeyEntry(keyPair.getPrivate), pass, chain);
+            keyStore.store(fos, pass);
+            */
         }
         catch (IOException | GeneralSecurityException e)
         {
