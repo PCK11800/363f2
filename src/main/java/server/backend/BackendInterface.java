@@ -32,7 +32,7 @@ public interface BackendInterface extends Remote {
     public String sendAuthenticationCode(String username) throws RemoteException;
 
     // Data Retrieval Methods
-    public String[] getAllNames() throws RemoteException;
+    public String[] getAllNames(String username) throws RemoteException;
 
     public String[] getPerson(String name) throws RemoteException;
 
@@ -55,11 +55,17 @@ public interface BackendInterface extends Remote {
     public void clearPermissions(String userName, String adminUserName, String adminPass)
         throws java.rmi.RemoteException;
 
-    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    public boolean newAccount(String userName, String password, int role) throws RemoteException;
+
+    public boolean deleteUser(String userName)
         throws java.rmi.RemoteException;
     
     public int getRole(String userName)
         throws java.rmi.RemoteException;
+
+    public boolean isPasswordValid(String username, String password) throws RemoteException;
+
+    public boolean isPasswordStrong(String password) throws RemoteException;
 
     public LinkedList<String> getAllUsers() throws java.rmi.RemoteException;
 

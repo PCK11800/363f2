@@ -4,6 +4,7 @@ import client.Client;
 import client.components.AppButton;
 import client.components.AppColors;
 import client.components.font.Inconsolata;
+import client.pages.AccountManager;
 import client.pages.DataEditor;
 import client.pages.components.ButtonWindow;
 import server.data.DataRetriever;
@@ -62,7 +63,7 @@ public class NamesList extends JPanel {
     String[] listOfNames = {};
     private void initPersonList() {
         try{
-            listOfNames = dataEditor.getClient().bI().getAllNames();
+            listOfNames = dataEditor.getClient().bI().getAllNames(dataEditor.getUsername());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -107,7 +108,7 @@ public class NamesList extends JPanel {
         scrollPane.setBackground(AppColors.BACKGROUND);
         scrollPane.setBorder(BorderFactory.createLineBorder(AppColors.BACKGROUND, 1));
 
-        add(scrollPane);
+        //add(scrollPane);
     }
 
     private JTextField filter = new JTextField();
@@ -122,7 +123,7 @@ public class NamesList extends JPanel {
         filter.setBorder(BorderFactory.createLineBorder(AppColors.BORDER, 1));
 
         filter.setPreferredSize(new Dimension(200, 20));
-        add(filter);
+        //add(filter);
 
         filter.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -184,6 +185,18 @@ public class NamesList extends JPanel {
 
             listOfNamesPanel.add(nameButton);
         }
+    }
+
+    public void enableList()
+    {
+        add(scrollPane);
+        add(filter);
+    }
+
+    public void showSelfOnly(String name)
+    {
+        add(scrollPane);
+        filter(name);
     }
 
     public void refresh()

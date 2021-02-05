@@ -1,10 +1,7 @@
 package client;
 
 import client.components.AppColors;
-import client.pages.DataEditor;
-import client.pages.Login;
-import client.pages.Permissions;
-import client.pages.TaskSelection;
+import client.pages.*;
 import server.backend.BackendInterface;
 
 import javax.swing.*;
@@ -15,7 +12,7 @@ public class Client extends JFrame {
 
     private BackendInterface bI;
     private JPanel currentPage = null;
-    private String password = "";
+    private String admin_password = "tY,?S5b&7Xn{)NR@";
 
     int APP_WIDTH = 1280;
     int APP_HEIGHT = 720;
@@ -51,9 +48,11 @@ public class Client extends JFrame {
         getContentPane().setBackground(AppColors.BACKGROUND);
         getContentPane().setLayout(null);
 
-        //initLogin();
-        //initPermissions("ADMIN");
-        initDataEditor("ADMIN");
+        initLogin();
+        //initPermissions("f2.scc363@gmail.com");
+        //initDataEditor("patient@sharklasers.com");
+        //initAccountManager("regulator@sharklasers.com");
+        //initAccountManager("f2.scc363@gmail.com");
     }
 
     Login login = new Login(this);
@@ -108,6 +107,19 @@ public class Client extends JFrame {
         repaint();
     }
 
+    AccountManager accountManager;
+    public void initAccountManager(String username)
+    {
+        resetPages();
+
+        accountManager = new AccountManager(username, this);
+        add(accountManager);
+        currentPage = accountManager;
+
+        pack();
+        repaint();
+    }
+
     private void resetPages()
     {
         if(currentPage != null)
@@ -122,12 +134,12 @@ public class Client extends JFrame {
         return bI;
     }
 
-    public void setPassword(String password){
-        this.password = password;
+    public void setAdmin_password(String admin_password){
+        this.admin_password = admin_password;
     }
 
-    public String getPassword(){
-        return password;
+    public String getAdmin_password(){
+        return admin_password;
     }
 
     public static void main(String[] args)

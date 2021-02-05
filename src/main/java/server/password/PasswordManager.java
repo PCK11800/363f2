@@ -116,16 +116,50 @@ public class PasswordManager{
      * USE THIS IN THE MAIN METHOD BELOW TO GENERATE A NEW PASSWORD.TXT FILE
      * IF ERRORS ARE FOUND.
      */
-    public void addNewUser(String userName, String password, int role)
+    public boolean addNewUser(String userName, String password, int role)
     {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
+        if(passwords.containsKey(userName) || role > 3 || role < 0)
+        {
+            return false;
+        }
+        else
+        {
+            SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[16];
+            random.nextBytes(salt);
 
-        byte[] hashedPassword = generateHash(password, salt);
-        SaltHash sh = new SaltHash(salt, hashedPassword, role);
-        passwords.put(userName, sh);
-        savePasswords();
+            byte[] hashedPassword = generateHash(password, salt);
+            SaltHash sh = new SaltHash(salt, hashedPassword, role);
+            passwords.put(userName, sh);
+
+            if(role == 0) //Patient
+            {
+                System.out.println("Patient");
+                addPermission_Admin(userName, 1);
+                addPermission_Admin(userName, 2);
+            }
+
+            else if(role == 2) //Regulator
+            {
+                System.out.println("Regulator");
+                addPermission_Admin(userName, 1);
+                addPermission_Admin(userName, 3);
+                addPermission_Admin(userName, 5);
+            }
+
+            else if(role == 1 || role == 3) //Staff
+            {
+                System.out.println("Staff");
+                addPermission_Admin(userName, 1);
+                addPermission_Admin(userName, 2);
+                addPermission_Admin(userName, 3);
+                addPermission_Admin(userName, 4);
+                addPermission_Admin(userName, 5);
+            }
+
+            savePasswords();
+            return true;
+        }
     }
 
     /**
@@ -192,6 +226,16 @@ public class PasswordManager{
             System.out.println("Adding of permission was unsucessful");
 
         return success;
+    }
+
+    private void addPermission_Admin(String userName, int perm)
+    {
+        if(passwords.containsKey(userName))
+        {
+            SaltHash newSH = passwords.get(userName);
+            newSH.addPermission(perm);
+            passwords.replace(userName, newSH);
+        }
     }
 
     public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
@@ -266,17 +310,12 @@ public class PasswordManager{
         return false;
     }
 
-    public boolean deleteUser(String userName, String adminUserName, String adminPassword)
+    public boolean deleteUser(String userName)
     {
-        if(!isPermitted(adminUserName, 8) || !checkIfPasswordIsCorrect(adminUserName, adminPassword))
-        {
-            System.out.println("Non authroised user tried to delete a users' profile");
-            return false;
-        }
-
         if(passwords.containsKey(userName))
         {
             passwords.remove(userName);
+            savePasswords();
             System.out.println("User: " + userName + " deleted");
             return true;
         }
@@ -321,10 +360,33 @@ public class PasswordManager{
         }
     }
 
+    /*
+     * USER ACCOUNTS FOR TESTING
+     * TEMP EMAIL FROM https://www.guerrillamail.com/
+     *
+     * ADMIN ACCOUNT
+     * Username: f2.scc363@gmail.com
+     * Password: tY,?S5b&7Xn{)NR@
+     *
+     * PATIENT ACCOUNT
+     * Username: patient@sharklasers.com
+     * Password: [RPrhn\R!3h>Fb{(
+     *
+     * DOCTOR ACCOUNT
+     * Username: doctor@sharklasers.com
+     * Password: `A%~9^2acHV'{tu=
+     *
+     * REGULATOR ACCOUNT
+     * Username: regulator@sharklasers.com
+     * Password: :nTz6<C~QBE8w&y9
+     */
     public static void main(String[] args)
     {
         PasswordManager pa = new PasswordManager();
-        pa.addNewUser(pa.ADMIN_NAME, "password", 0);
+        pa.addNewUser("f2.scc363@gmail.com", "tY,?S5b&7Xn{)NR@", 3);
+        pa.addNewUser("patient@sharklasers.com", "[RPrhn\\R!3h>Fb{(", 0);
+        pa.addNewUser("doctor@sharklasers.com", "`A%~9^2acHV'{tu=", 1);
+        pa.addNewUser("regulator@sharklasers.com", ":nTz6<C~QBE8w&y9", 2);
     }
 }
 

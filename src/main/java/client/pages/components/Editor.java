@@ -36,7 +36,7 @@ public class Editor extends JPanel {
     private void initTextArea()
     {
         textArea = new JTextArea();
-        textArea.setEditable(true);
+        textArea.setEditable(false);
         textArea.setBounds(this.getBounds());
         textArea.setFont(new Inconsolata().getFont(16));
         textArea.setLineWrap(true);
@@ -85,6 +85,11 @@ public class Editor extends JPanel {
     public void disableEditor()
     {
         remove(scrollPane);
+    }
+
+    public void enableEditor()
+    {
+        add(scrollPane);
     }
 
     public JTextArea getTextArea() {

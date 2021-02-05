@@ -10,27 +10,20 @@ import client.pages.components.NamesList;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.rmi.RemoteException;
 
 public class DataEditor extends JPanel {
 
     private Client client;
     private String username;
-    private int role = 0; //Default patient
     private String[] currentSelectedPerson = null;
 
     public DataEditor(String username, Client client)
     {
         this.client = client;
         this.username = username;
-
-        try{
-            role = client.bI().getRole(username);
-            //role = 3;
-        }catch (RemoteException e)
-        {
-            e.printStackTrace();
-        }
 
         initUI();
         setVisible(true);
@@ -47,6 +40,8 @@ public class DataEditor extends JPanel {
         initPersonalFields();
         initMedicalField();
         initSettings();
+
+        enableFunctionalitiesAccordingToPermission();
     }
 
     private NamesList namesList;
@@ -54,6 +49,7 @@ public class DataEditor extends JPanel {
     {
         namesList = new NamesList(this, 200, 630);
         namesList.setLocation(10, 20);
+        namesList.enableList();
         add(namesList);
     }
 
@@ -74,7 +70,7 @@ public class DataEditor extends JPanel {
         genderLabel = new JLabel("Gender");
         birthdayLabel = new JLabel("Birthday");
         ageLabel = new JLabel("Age");
-        emailLabel = new JLabel("Email");
+        emailLabel = new JLabel("Email* (Must include)");
         addressLabel = new JLabel("Address");
         phoneNumberLabel = new JLabel("Phone Number");
 
@@ -136,23 +132,14 @@ public class DataEditor extends JPanel {
         address.setLineWrap(true);
         add(address);
 
-        //Patient
-        if(role == 0)
-        {
-            name.setEditable(false);
-        }
-        //Staff & Regulator
-        if(role == 1 || role == 2)
-        {
-            name.setEditable(false);
-            gender.setEditable(false);
-            birthday.setEditable(false);
-            age.setEditable(false);
-            address.setEditable(false);
-            email.setEditable(false);
-            phoneNumber.setEditable(false);
-            address.setEnabled(false);
-        }
+        name.setEditable(false);
+        gender.setEditable(false);
+        birthday.setEditable(false);
+        age.setEditable(false);
+        address.setEditable(false);
+        email.setEditable(false);
+        phoneNumber.setEditable(false);
+        address.setEnabled(false);
     }
 
     private void setFieldSettings(JTextField textField)
@@ -177,23 +164,13 @@ public class DataEditor extends JPanel {
     private void initMedicalField()
     {
         editor = new Editor(490, 30, 750, 560);
+        editor.disableEditor();
         add(editor);
 
         editorLabel = new JLabel("Doctor's Note");
         setLabelSettings(editorLabel);
         editorLabel.setBounds(490, 0, 250, 40);
         add(editorLabel);
-
-        //Patient & Regulator
-        if(role == 0 || role == 2)
-        {
-            editor.disableEditor();
-        }
-        //Staff
-        if(role == 1)
-        {
-            //Nothing
-        }
     }
 
     private AppButton addNewPerson, savePerson, deletePerson, goBack;
@@ -210,6 +187,7 @@ public class DataEditor extends JPanel {
                 namesList.refresh();
             }
         });
+        addNewPerson.setEnabled(false);
         add(addNewPerson);
 
         savePerson = new AppButton();
@@ -219,10 +197,26 @@ public class DataEditor extends JPanel {
         savePerson.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                savePerson();
-                namesList.refresh();
+                if(email.getText().isEmpty())
+                {
+                    savePerson.setText("!Missing Email!");
+                }
+                else {
+                    savePerson();
+                    namesList.refresh();
+                }
             }
         });
+        savePerson.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                savePerson.setText("Save");
+            }
+        });
+        savePerson.setEnabled(false);
         add(savePerson);
 
         deletePerson = new AppButton();
@@ -237,6 +231,7 @@ public class DataEditor extends JPanel {
                 namesList.refresh();
             }
         });
+        deletePerson.setEnabled(false);
         add(deletePerson);
 
         goBack = new AppButton();
@@ -252,20 +247,6 @@ public class DataEditor extends JPanel {
             }
         });
         add(goBack);
-
-        //Patient & Staff
-        if(role == 0 || role == 1)
-        {
-            addNewPerson.setEnabled(false);
-            deletePerson.setEnabled(false);
-        }
-        //Regulator
-        if(role == 2)
-        {
-            addNewPerson.setEnabled(false);
-            savePerson.setEnabled(false);
-            deletePerson.setEnabled(false);
-        }
     }
 
     private void createNewPerson()
@@ -322,8 +303,56 @@ public class DataEditor extends JPanel {
         }
     }
 
+    private void enableFunctionalitiesAccordingToPermission()
+    {
+        try {
+            //View Personal data
+            if(client.bI().isPermitted(username, 1))
+            {
+                name.setEnabled(true);
+            }
+            //Edit Personal Data
+            if(client.bI().isPermitted(username, 2))
+            {
+                name.setEditable(true);
+                gender.setEditable(true);
+                birthday.setEditable(true);
+                age.setEditable(true);
+                address.setEditable(true);
+                email.setEditable(true);
+                phoneNumber.setEditable(true);
+                address.setEnabled(true);
+
+                savePerson.setEnabled(true);
+            }
+            //View Medical Data
+            if(client.bI().isPermitted(username, 3))
+            {
+                editor.enableEditor();
+            }
+            //Edit Medical Data
+            if(client.bI().isPermitted(username, 4))
+            {
+                editor.enableEditor();
+                editor.getTextArea().setEditable(true);
+            }
+            if(client.bI().getRole(username) == 3)
+            {
+                addNewPerson.setEnabled(true);
+                deletePerson.setEnabled(true);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Client getClient()
     {
         return client;
+    }
+
+    public String getUsername()
+    {
+        return username;
     }
 }

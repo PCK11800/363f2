@@ -121,7 +121,7 @@ public class MultifactorAuthenticator {
             message.setSubject("Welcome");
             message.setText("A new account has been created using this email. " +
                     "Your email is your account name, the system administrator will be in contact with your password. " +
-                    "Please update your password on your first time logging in." +
+                    "Please update your password on your first time logging in. " +
                     "If you believe this to be a mistake, please contact the administrator.");
 
             Transport.send(message);

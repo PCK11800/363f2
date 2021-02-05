@@ -26,6 +26,7 @@ public class Permissions extends JPanel {
         this.username = username;
         try{
             userRole = client.bI().getRole(username);
+            //userRole = 3;
         } catch(Exception e){
             System.out.println(e);
         }
@@ -56,76 +57,51 @@ public class Permissions extends JPanel {
         userLabel.setBackground(AppColors.BACKGROUND);
         userLabel.setForeground(AppColors.BORDER);
         userLabel.setFont(new Inconsolata().getFont(22));
-        userLabel.setBounds(620, 50, 250, 30);
+        userLabel.setBounds(500, 50, 500, 30);
         add(userLabel);
     }
 
     private UsersList usersList;
     private void initUsersList()
     {
-        usersList = new UsersList(this, 200, 460);
+        usersList = new UsersList(this, 250, 460);
         usersList.setLocation(45, 150);
         add(usersList);
     }
 
-    private JCheckBox viewPersonalData, viewAllData, editPersonalData, editAllData
-            , addDoctorsNote, deleteDoctorsNotes, createAccounts, deleteAccounts;
+    private JCheckBox viewPersonalData, editPersonalData,
+            viewDoctorsNote, editDoctorsNote, selectOtherPeopleData;
     private void initPermissionsFields()
     {
-
         viewPersonalData = new JCheckBox();
-        viewPersonalData.setBounds(320, 150, 250, 30);
+        viewPersonalData.setBounds(560, 150, 250, 30);
         viewPersonalData.setText("View Personal Data");
         setCheckBoxSettings(viewPersonalData);
         add(viewPersonalData);
 
-        if(userRole == 1 || userRole == 2 || userRole == 3) {
-            viewAllData = new JCheckBox();
-            viewAllData.setBounds(320, 250, 250, 30);
-            viewAllData.setText("View All Data");
-            setCheckBoxSettings(viewAllData);
-            add(viewAllData);
-        }
+        editPersonalData = new JCheckBox();
+        editPersonalData.setBounds(560, 220, 250, 30);
+        editPersonalData.setText("Edit Personal Data");
+        setCheckBoxSettings(editPersonalData);
+        add(editPersonalData);
 
-        if(userRole == 1 || userRole == 3) {
-            editPersonalData = new JCheckBox();
-            editPersonalData.setBounds(320, 350, 250, 30);
-            editPersonalData.setText("Edit Personal Data");
-            setCheckBoxSettings(editPersonalData);
-            add(editPersonalData);
+        viewDoctorsNote = new JCheckBox();
+        viewDoctorsNote.setBounds(560, 290, 250, 30);
+        viewDoctorsNote.setText("View Doctors Note");
+        setCheckBoxSettings(viewDoctorsNote);
+        add(viewDoctorsNote);
 
-            editAllData = new JCheckBox();
-            editAllData.setBounds(320, 450, 250, 30);
-            editAllData.setText("Edit All Data");
-            setCheckBoxSettings(editAllData);
-            add(editAllData);
+        editDoctorsNote = new JCheckBox();
+        editDoctorsNote.setBounds(560, 360, 250, 30);
+        editDoctorsNote.setText("Edit Doctors Notes");
+        setCheckBoxSettings(editDoctorsNote);
+        add(editDoctorsNote);
 
-            addDoctorsNote = new JCheckBox();
-            addDoctorsNote.setBounds(820, 150, 250, 30);
-            addDoctorsNote.setText("Add Doctors Note");
-            setCheckBoxSettings(addDoctorsNote);
-            add(addDoctorsNote);
-
-            deleteDoctorsNotes = new JCheckBox();
-            deleteDoctorsNotes.setBounds(820, 250, 250, 30);
-            deleteDoctorsNotes.setText("Delete Doctors Notes");
-            setCheckBoxSettings(deleteDoctorsNotes);
-            add(deleteDoctorsNotes);
-        }
-
-        /*
-        createAccounts = new JCheckBox();
-        createAccounts.setBounds(820, 350, 250, 30);
-        createAccounts.setText("Create Accounts");
-        setCheckBoxSettings(createAccounts);
-        add(createAccounts);
-
-        deleteAccounts = new JCheckBox();
-        deleteAccounts.setBounds(820, 450, 250, 30);
-        deleteAccounts.setText("Delete Accounts");
-        setCheckBoxSettings(deleteAccounts);
-        add(deleteAccounts);
-         */
+        selectOtherPeopleData = new JCheckBox();
+        selectOtherPeopleData.setBounds(560, 430, 320, 30);
+        selectOtherPeopleData.setText("Select Other Patient's Data");
+        setCheckBoxSettings(selectOtherPeopleData);
+        add(selectOtherPeopleData);
     }
 
     private void setCheckBoxSettings(JCheckBox checkBox)
@@ -168,46 +144,33 @@ public class Permissions extends JPanel {
                 } else{
                     removed.add(1);
                 }
-
-                if(userRole == 1 || userRole == 2 || userRole == 3){
-                    if(viewAllData.isSelected()) {
-                        added.add(2);
-                    } else{
-                        removed.add(2);
-                    }
+                if(editPersonalData.isSelected()) {
+                    added.add(2);
+                } else{
+                    removed.add(2);
+                }
+                if(viewDoctorsNote.isSelected()) {
+                    added.add(3);
+                } else{
+                    removed.add(3);
+                }
+                if(editDoctorsNote.isSelected()) {
+                    added.add(4);
+                } else{
+                    removed.add(4);
+                }
+                if(selectOtherPeopleData.isSelected()) {
+                    added.add(5);
+                } else{
+                    removed.add(5);
                 }
 
-                if(userRole == 1 || userRole == 3){
-                    if(editPersonalData.isSelected()) {
-                        added.add(3);
-                    } else{
-                        removed.add(3);
-                    }
-
-                    if(editAllData.isSelected()) {
-                        added.add(4);
-                    } else{
-                        removed.add(4);
-                    }
-
-                    if(addDoctorsNote.isSelected()) {
-                        added.add(5);
-                    } else{
-                        removed.add(5);
-                    }
-
-                    if(deleteDoctorsNotes.isSelected()) {
-                        added.add(6);
-                    } else{
-                        removed.add(6);
-                    }
-                }
                 try {
                     for(int i: added){
-                        client.bI().addPermission(currentSelectedUser, i, username, client.getPassword());
+                        client.bI().addPermission(currentSelectedUser, i, username, client.getAdmin_password());
                     }
                     for(int i: removed){
-                        client.bI().removePermission(currentSelectedUser, i, username, client.getPassword());
+                        client.bI().removePermission(currentSelectedUser, i, username, client.getAdmin_password());
                     }
                 } catch (RemoteException re) {
                     re.printStackTrace();
@@ -236,8 +199,44 @@ public class Permissions extends JPanel {
     // Check UserList's nameButton actionListener
     public void populateFields(String username, int role)
     {
+        viewPersonalData.setSelected(false);
+        editPersonalData.setSelected(false);
+
+        viewDoctorsNote.setSelected(false);
+        editDoctorsNote.setSelected(false);
+
+        selectOtherPeopleData.setSelected(false);
+
         currentSelectedUser = username;
         userLabel.setText("User: " + currentSelectedUser);
+        for(int i = 1; i < 6; i++)
+        {
+            try {
+                if(client.bI().isPermitted(currentSelectedUser, i))
+                {
+                    switch(i)
+                    {
+                        case 1:
+                            viewPersonalData.setSelected(true);
+                            break;
+                        case 2:
+                            editPersonalData.setSelected(true);
+                            break;
+                        case 3:
+                            viewDoctorsNote.setSelected(true);
+                            break;
+                        case 4:
+                            editDoctorsNote.setSelected(true);
+                            break;
+                        case 5:
+                            selectOtherPeopleData.setSelected(true);
+                            break;
+                    }
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public Client getClient()

@@ -14,7 +14,6 @@ public class SaltHash implements Serializable{
         this.salt = salt;
         this.hash = hash;
         this.role = role;
-        assignPermissions(role);
     }
 
     public byte[] getSalt()
@@ -57,36 +56,4 @@ public class SaltHash implements Serializable{
         return this.role;
     }
 
-    private void assignPermissions(int role)
-    {
-        switch (role) {
-            case 0:
-                permissions.add(1);
-                break;
-        
-            case 1:
-                permissions.add(1);
-                permissions.add(2);
-                permissions.add(3);
-                permissions.add(4);
-                permissions.add(5);
-                permissions.add(6);
-                break;
-            
-            case 2:
-                permissions.add(1);
-                permissions.add(2);
-            
-            case 3:
-                permissions.add(1);
-                permissions.add(2);
-                permissions.add(3);
-                permissions.add(4);
-                permissions.add(5);
-                permissions.add(6);
-                permissions.add(7);
-                permissions.add(8);
-
-        }
-    }
 }

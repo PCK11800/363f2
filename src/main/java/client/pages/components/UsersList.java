@@ -1,8 +1,10 @@
 package client.pages.components;
 
+import client.Client;
 import client.components.AppButton;
 import client.components.AppColors;
 import client.components.font.Inconsolata;
+import client.pages.AccountManager;
 import client.pages.Permissions;
 
 import javax.swing.*;
@@ -19,11 +21,27 @@ import java.util.LinkedList;
 public class UsersList extends JPanel {
 
     private Permissions permissions;
+    private AccountManager accountManager;
+    private Client client;
     private int width, height;
+    private int mode; //0 = dataEditor, 1 = accountManager
 
     public UsersList(Permissions permissions, int width, int height)
     {
         this.permissions = permissions;
+        this.mode = 0;
+        this.client = permissions.getClient();
+        this.width = width;
+        this.height = height;
+        initUI();
+        setVisible(true);
+    }
+
+    public UsersList(AccountManager accountManager, int width, int height)
+    {
+        this.accountManager = accountManager;
+        this.mode = 1;
+        this.client = accountManager.getClient();
         this.width = width;
         this.height = height;
         initUI();
@@ -54,7 +72,7 @@ public class UsersList extends JPanel {
     private void initPersonList() {
 
         try{
-            LinkedList<String> listOfNames_list = permissions.getClient().bI().getAllUsers();
+            LinkedList<String> listOfNames_list = client.bI().getAllUsers();
             listOfNames = listOfNames_list.toArray(new String[listOfNames_list.size()]);
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -166,16 +184,31 @@ public class UsersList extends JPanel {
             nameButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    int person = 0;
-                    try {
-                        person = permissions.getClient().bI().getRole(nameButton.getText());
-                    } catch (RemoteException remoteException) {
-                        remoteException.printStackTrace();
+                    if(mode == 0)
+                    {
+                        int person = 0;
+                        try {
+                            person = client.bI().getRole(nameButton.getText());
+                        } catch (RemoteException remoteException) {
+                            remoteException.printStackTrace();
+                        }
+                        permissions.populateFields(nameButton.getText(), person);
                     }
-                    permissions.populateFields(nameButton.getText(), person);
+                    if(mode == 1)
+                    {
+                        String person = null;
+                        person = nameButton.getText();
+                        accountManager.populateFields(person);
+                    }
                 }
             });
             listOfNamesPanel.add(nameButton);
         }
+    }
+
+    public void refresh()
+    {
+        initPersonList();
+        filter(filter.getText());
     }
 }
