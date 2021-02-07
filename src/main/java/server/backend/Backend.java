@@ -1,5 +1,6 @@
 package server.backend;
 
+import server.Log.Log;
 import server.data.DataRetriever;
 import server.multifactor.MultifactorAuthenticator;
 import server.password.Evaluation;
@@ -27,6 +28,8 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     private PublicKey serverPublicKey;
     private PrivateKey serverPrivateKey;
     private SecretKey sessionKey;
+
+    private Log log = new Log();
 
 
     public Backend() throws RemoteException {
@@ -99,8 +102,11 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     public boolean login(String username, String password) throws RemoteException {
         boolean loginValid = pM.checkIfPasswordIsCorrect(username, password);
         if(!loginValid){
-            String email = "f2.scc363@gmail.com";//username;
-            mfa.failedLogInAttempt(email);
+            //String email = "f2.scc363@gmail.com";//username;
+            mfa.failedLogInAttempt(username);
+            log.addMsg(1,"Failed Log In Attempt - Wrong password" , username);
+        } else{
+            log.addMsg(0,"Successful Log In" , username);
         }
         return loginValid;
 
@@ -111,6 +117,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         String email = username; //Retrieve user email
         String code = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode(email, code);
+        log.addMsg(0,"Authentication code sent" , username);
         return code;
     }
 
@@ -140,25 +147,41 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     {
         System.out.println("Reached BACKEND");
         dataRetriever.deletePerson(name);
+        log.addMsg(1,"User deleted" , name);
     }
     
     public boolean deleteUser(String userName) throws RemoteException
     {
-        return pM.deleteUser(userName);
+        boolean result = pM.deleteUser(userName);
+        if(result){
+            log.addMsg(1,"User deleted" , userName);
+        } else{
+            log.addMsg(1,"Attempt to delete user failed" , userName);
+        }
+        return result;
     }
     
     public boolean newAccount(String userName, String password, int role) throws RemoteException
     {
         boolean result =  pM.addNewUser(userName, password, role);
         if(result) {
+            log.addMsg(0,"New account added" , userName);
             mfa.newAccount(userName);
+        } else{
+            log.addMsg(1,"Failed to add user" , userName);
         }
         return result;
     }
     
     public boolean changePassword(String userName, String password, String oldPassword) throws RemoteException
     {
-        return pM.changePassword(userName, password, oldPassword);
+        boolean result =  pM.changePassword(userName, password, oldPassword);
+        if(result) {
+            log.addMsg(0,"Password changed" , userName);
+        } else{
+            log.addMsg(1,"Failed to change password" , userName);
+        }
+        return result;
     }
     
     public boolean addPermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
@@ -167,6 +190,9 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         if(result) {
             String email = "f2.scc363@gmail.com";//username;
             mfa.permissionsUpdated(email);
+            log.addMsg(0,"Users permissions changed" , userName);
+        } else{
+            log.addMsg(2,"Failed to change users permissions" , userName);
         }
         return result;
     }
@@ -177,6 +203,9 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         if(result) {
             String email = "f2.scc363@gmail.com";//username;
             mfa.permissionsUpdated(email);
+            log.addMsg(0,"Users permissions changed" , userName);
+        } else{
+            log.addMsg(2,"Failed to change users permissions" , userName);
         }
         return result;
     }
