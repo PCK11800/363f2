@@ -24,12 +24,6 @@ public class Permissions extends JPanel {
     {
         this.client = client;
         this.username = username;
-        try{
-            userRole = client.bI().getRole(username);
-            //userRole = 3;
-        } catch(Exception e){
-            System.out.println(e);
-        }
 
 
         initUI();
@@ -77,31 +71,28 @@ public class Permissions extends JPanel {
         viewPersonalData.setBounds(560, 150, 250, 30);
         viewPersonalData.setText("View Personal Data");
         setCheckBoxSettings(viewPersonalData);
-        add(viewPersonalData);
 
-        editPersonalData = new JCheckBox();
-        editPersonalData.setBounds(560, 220, 250, 30);
-        editPersonalData.setText("Edit Personal Data");
-        setCheckBoxSettings(editPersonalData);
-        add(editPersonalData);
-
-        viewDoctorsNote = new JCheckBox();
-        viewDoctorsNote.setBounds(560, 290, 250, 30);
-        viewDoctorsNote.setText("View Doctors Note");
-        setCheckBoxSettings(viewDoctorsNote);
-        add(viewDoctorsNote);
-
-        editDoctorsNote = new JCheckBox();
-        editDoctorsNote.setBounds(560, 360, 250, 30);
-        editDoctorsNote.setText("Edit Doctors Notes");
-        setCheckBoxSettings(editDoctorsNote);
-        add(editDoctorsNote);
 
         selectOtherPeopleData = new JCheckBox();
         selectOtherPeopleData.setBounds(560, 430, 320, 30);
         selectOtherPeopleData.setText("Select Other Patient's Data");
         setCheckBoxSettings(selectOtherPeopleData);
-        add(selectOtherPeopleData);
+
+        viewDoctorsNote = new JCheckBox();
+        viewDoctorsNote.setBounds(560, 290, 250, 30);
+        viewDoctorsNote.setText("View Doctors Note");
+        setCheckBoxSettings(viewDoctorsNote);
+
+        editPersonalData = new JCheckBox();
+        editPersonalData.setBounds(560, 220, 250, 30);
+        editPersonalData.setText("Edit Personal Data");
+        setCheckBoxSettings(editPersonalData);
+
+        editDoctorsNote = new JCheckBox();
+        editDoctorsNote.setBounds(560, 360, 250, 30);
+        editDoctorsNote.setText("Edit Doctors Notes");
+        setCheckBoxSettings(editDoctorsNote);
+
     }
 
     private void setCheckBoxSettings(JCheckBox checkBox)
@@ -144,25 +135,33 @@ public class Permissions extends JPanel {
                 } else{
                     removed.add(1);
                 }
-                if(editPersonalData.isSelected()) {
-                    added.add(2);
-                } else{
-                    removed.add(2);
+
+                if(userRole == 1 || userRole == 2 || userRole == 3) {
+                    if(viewDoctorsNote.isSelected()) {
+                        added.add(3);
+                    } else{
+                        removed.add(3);
+                    }
+
+                    if(selectOtherPeopleData.isSelected()) {
+                        added.add(5);
+                    } else{
+                        removed.add(5);
+                    }
                 }
-                if(viewDoctorsNote.isSelected()) {
-                    added.add(3);
-                } else{
-                    removed.add(3);
-                }
-                if(editDoctorsNote.isSelected()) {
-                    added.add(4);
-                } else{
-                    removed.add(4);
-                }
-                if(selectOtherPeopleData.isSelected()) {
-                    added.add(5);
-                } else{
-                    removed.add(5);
+
+                if(userRole == 1 || userRole == 3) {
+                    if (editPersonalData.isSelected()) {
+                        added.add(2);
+                    } else {
+                        removed.add(2);
+                    }
+
+                    if (editDoctorsNote.isSelected()) {
+                        added.add(4);
+                    } else {
+                        removed.add(4);
+                    }
                 }
 
                 try {
@@ -199,6 +198,26 @@ public class Permissions extends JPanel {
     // Check UserList's nameButton actionListener
     public void populateFields(String username, int role)
     {
+        userRole = role;
+
+        remove(viewPersonalData);
+        remove(selectOtherPeopleData);
+        remove(viewDoctorsNote);
+        remove(editDoctorsNote);
+        remove(editPersonalData);
+
+        add(viewPersonalData);
+        if(userRole == 1 || userRole == 2 || userRole == 3) {
+            add(selectOtherPeopleData);
+            add(viewDoctorsNote);
+        }
+        if(userRole == 1 || userRole == 3) {
+            add(editDoctorsNote);
+            add(editPersonalData);
+        }
+        revalidate();
+        repaint();
+
         viewPersonalData.setSelected(false);
         editPersonalData.setSelected(false);
 
