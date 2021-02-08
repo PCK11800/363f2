@@ -7,6 +7,7 @@ import client.components.extras.GhostText;
 import client.components.font.Inconsolata;
 import client.pages.components.NamesList;
 import client.pages.components.UsersList;
+import server.credentials.SessionToken;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,13 +24,18 @@ public class AccountManager extends JPanel {
     private int userRole = -1;
     private boolean isAdmin = false;
     private String currentSelectedUser = null;
+    private SessionToken token;
 
-    public AccountManager(String username, Client client)
+
+    public AccountManager(String username, Client client, SessionToken sessionToken)
     {
+        this.token = sessionToken;
         this.client = client;
         this.username = username;
         try{
-            userRole = client.bI().getRole(username);
+            //userRole = client.bI().getRole(username);
+            String encryptedUserRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()));
+            userRole = Integer.parseInt(client.decryptMessage(encryptedUserRole, token.returnSessionTokenKey()));
             if(userRole == 3)
             {
                 isAdmin = true;
@@ -95,11 +101,13 @@ public class AccountManager extends JPanel {
                 boolean isPasswordStrong = false;
 
                 try {
-                    if(client.bI().isPasswordValid(username, oldPassword_str))
+                    //if(client.bI().isPasswordValid(username, oldPassword_str))
+                    if(client.bI().isPasswordValid(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(oldPassword_str, token.returnSessionTokenKey())))
                     {
                         isPasswordValid = true;
                     }
-                    if(client.bI().isPasswordStrong(newPassword_str))
+                    //if(client.bI().isPasswordStrong(newPassword_str))
+                    if(client.bI().isPasswordStrong(client.encryptMessage(newPassword_str, token.returnSessionTokenKey())))
                     {
                         isPasswordStrong = true;
                     }
@@ -115,7 +123,8 @@ public class AccountManager extends JPanel {
 
                     if(isPasswordStrong && isPasswordValid)
                     {
-                        client.bI().changePassword(username, newPassword_str, oldPassword_str);
+                        //client.bI().changePassword(username, newPassword_str, oldPassword_str);
+                        client.bI().changePassword(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(newPassword_str, token.returnSessionTokenKey()), client.encryptMessage(oldPassword_str, token.returnSessionTokenKey()));
                         setPassword.setText("Password Changed!");
                     }
 
@@ -135,7 +144,7 @@ public class AccountManager extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 removeAll();
                 repaint();
-                client.initTaskSelection(username);
+                client.initTaskSelection(username, token);
             }
         });
 
@@ -157,7 +166,7 @@ public class AccountManager extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 removeAll();
                 repaint();
-                client.initTaskSelection(username);
+                client.initTaskSelection(username, token);
             }
         });
         add(goBack_admin);
@@ -197,7 +206,8 @@ public class AccountManager extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boolean success = false;
                 try {
-                    success = client.bI().deleteUser(currentSelectedUser);
+                    //success = client.bI().deleteUser(currentSelectedUser);
+                    success = client.bI().deleteUser(client.encryptMessage(currentSelectedUser,token.returnSessionTokenKey()));
                     usersList.refresh();
                 } catch (RemoteException remoteException) {
                     remoteException.printStackTrace();
@@ -282,7 +292,8 @@ public class AccountManager extends JPanel {
                 else
                 {
                     try {
-                        if(client.bI().newAccount(newUsername, newPassword, role))
+                        //if(client.bI().newAccount(newUsername, newPassword, role))
+                        if(client.bI().newAccount(client.encryptMessage(newUsername,token.returnSessionTokenKey()), client.encryptMessage(newPassword,token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(role),token.returnSessionTokenKey())))
                         {
                             createUser.setText("User created!");
                             usersList.refresh();
@@ -359,7 +370,9 @@ public class AccountManager extends JPanel {
 
         int role = -1;
         try {
-            role = client.bI().getRole(currentSelectedUser);
+            //role = client.bI().getRole(currentSelectedUser);
+            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()));
+            role = Integer.parseInt(client.decryptMessage(encryptedRole, token.returnSessionTokenKey()));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -383,6 +396,8 @@ public class AccountManager extends JPanel {
                 break;
         }
     }
+
+    public SessionToken getSession() { return token; }
 
     public Client getClient() {
         return client;

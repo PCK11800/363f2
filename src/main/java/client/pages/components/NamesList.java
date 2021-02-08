@@ -61,9 +61,11 @@ public class NamesList extends JPanel {
 
     JPanel listOfNamesPanel = new JPanel();
     String[] listOfNames = {};
+    String[] encryptedlistOfNames;
     private void initPersonList() {
         try{
-            listOfNames = dataEditor.getClient().bI().getAllNames(dataEditor.getUsername());
+            encryptedlistOfNames = dataEditor.getClient().bI().getAllNames(dataEditor.getClient().encryptMessage(dataEditor.getUsername(), dataEditor.getSession().returnSessionTokenKey()));
+            listOfNames = dataEditor.getClient().decryptArrayMessage(encryptedlistOfNames, dataEditor.getSession().returnSessionTokenKey());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -174,8 +176,12 @@ public class NamesList extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String[] person = null;
+                    String[] encryptedPerson = null;
                     try {
-                        person = dataEditor.getClient().bI().getPerson(nameButton.getText());
+                        //person = dataEditor.getClient().bI().getPerson(nameButton.getText());
+
+                        encryptedPerson = dataEditor.getClient().bI().getPerson(dataEditor.getClient().encryptMessage(nameButton.getText(), dataEditor.getSession().returnSessionTokenKey()));
+                        person = dataEditor.getClient().decryptArrayMessage(encryptedPerson, dataEditor.getSession().returnSessionTokenKey());
                     } catch (RemoteException remoteException) {
                         remoteException.printStackTrace();
                     }

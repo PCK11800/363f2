@@ -11,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.server.RemoteObject;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.*;
 import java.util.Arrays;
@@ -27,7 +28,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     private PublicKey serverPublicKey;
     private PrivateKey serverPrivateKey;
-    private SecretKey sessionKey;
+    private SecretKey sessionKey = null;
 
     private Log log = new Log();
 
@@ -47,7 +48,93 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         } catch(Exception e) {
             e.printStackTrace();
         }
+    }
 
+    private String encryptMessage(String message)
+    {
+        String encrypted = "";
+        if (sessionKey != null) {
+            try {
+                Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+                cipher.init(Cipher.ENCRYPT_MODE, sessionKey);
+                final byte[] encValue = cipher.doFinal(message.getBytes("UTF-8"));
+                encrypted = Base64.getEncoder().encodeToString(encValue);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return encrypted;
+    }
+
+    private String[] encryptArrayMessage(String[] messages)
+    {
+        String[] encryptedMessages = new String[messages.length];
+        String encrypted = "";
+
+        for (int i = 0; i < messages.length; i++)
+        {
+            if (sessionKey != null) {
+                try {
+                    Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+                    cipher.init(Cipher.ENCRYPT_MODE, sessionKey);
+                    final byte[] encValue = cipher.doFinal(messages[i].getBytes("UTF-8"));
+                    encrypted = Base64.getEncoder().encodeToString(encValue);
+                    encryptedMessages[i] = encrypted;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                encryptedMessages[i] = "";
+            }
+        }
+        return encryptedMessages;
+    }
+
+    private String[] decryptArrayMessage(String[] encryptedMessages)
+    {
+        String[] decryptedMessages = new String[encryptedMessages.length];
+        String decrypted = "";
+
+        for (int i = 0; i < encryptedMessages.length; i++)
+        {
+            if (sessionKey != null) {
+                try {
+                    Cipher c = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+                    c.init(Cipher.DECRYPT_MODE, sessionKey);
+                    byte[] decryptedBytes = c.doFinal(Base64.getDecoder().decode(encryptedMessages[i]));
+                    decrypted = new String(decryptedBytes);
+                    decryptedMessages[i] = decrypted;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                decryptedMessages[i] = "";
+            }
+        }
+        return decryptedMessages;
+    }
+
+    private String decryptMessage(String encryptedMessage)
+    {
+        String decrypted = "";
+        if (sessionKey != null) {
+            try {
+                Cipher c = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+                c.init(Cipher.DECRYPT_MODE, sessionKey);
+                byte[] decryptedBytes = c.doFinal(Base64.getDecoder().decode(encryptedMessage));
+                decrypted = new String(decryptedBytes);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return decrypted;
     }
 
     public void generateServerKeys() throws java.rmi.RemoteException
@@ -114,105 +201,142 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     }
 
     public String sendAuthenticationCode(String username) throws RemoteException {
-        String email = username; //Retrieve user email
+        String decryptedUsername = this.decryptMessage(username);
+        String email = decryptedUsername; //Retrieve user email
         String code = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode(email, code);
-        log.addMsg(0,"Authentication code sent" , username);
-        return code;
+        log.addMsg(0,"Authentication code sent" , decryptedUsername);
+        String encryptedCode = this.encryptMessage(code);
+        return encryptedCode;
     }
 
     public String[] getAllNames(String username) throws RemoteException {
-        if(!isPermitted(username, 5))
+        String decryptedUsername = decryptMessage(username);
+        if(!isPermitted(username, encryptMessage(Integer.toString(5))))
         {
-            String[] names = {dataRetriever.getNameFromEmail(username)};
-            return names;
+            String[] names = {dataRetriever.getNameFromEmail(decryptedUsername)};
+            String[] encryptedNames = encryptArrayMessage(names);
+            return encryptedNames;
         }
         else
         {
-            return dataRetriever.getAllNames();
+            //return dataRetriever.getAllNames();
+            return encryptArrayMessage(dataRetriever.getAllNames());
         }
     }
 
     public String[] getPerson(String name) throws RemoteException
     {
-        return dataRetriever.getPerson(name);
+        String decryptedName = decryptMessage(name);
+        return encryptArrayMessage(dataRetriever.getPerson(decryptedName));
     }
 
     public void storePerson(String[] person) throws RemoteException
     {
-        dataRetriever.storePerson(person);
+        String[] decryptedPerson = decryptArrayMessage(person);
+        dataRetriever.storePerson(decryptedPerson);
     }
     //There are two methods for deleting users, which is best can be decided on monday
     public void deletePerson(String name) throws RemoteException
     {
+        String decryptedName = decryptMessage(name);
         System.out.println("Reached BACKEND");
-        dataRetriever.deletePerson(name);
-        log.addMsg(1,"User deleted" , name);
+        dataRetriever.deletePerson(decryptedName);
+        log.addMsg(1,"User deleted" , decryptedName);
     }
     
     public boolean deleteUser(String userName) throws RemoteException
     {
-        boolean result = pM.deleteUser(userName);
+        String decryptedName = decryptMessage(userName);
+        boolean result = pM.deleteUser(decryptedName);
         if(result){
-            log.addMsg(1,"User deleted" , userName);
+            log.addMsg(1,"User deleted" , decryptedName);
         } else{
-            log.addMsg(1,"Attempt to delete user failed" , userName);
+            log.addMsg(1,"Attempt to delete user failed" , decryptedName);
         }
         return result;
     }
     
-    public boolean newAccount(String userName, String password, int role) throws RemoteException
+    public boolean newAccount(String userName, String password, String role) throws RemoteException
     {
-        boolean result =  pM.addNewUser(userName, password, role);
+        String decryptedName = decryptMessage(userName);
+        String decryptedPassword = decryptMessage(password);
+        String decryptedRole = decryptMessage(role);
+        int finalRole = Integer.parseInt(decryptedRole);
+
+        boolean result =  pM.addNewUser(decryptedName, decryptedPassword, finalRole);
         if(result) {
-            log.addMsg(0,"New account added" , userName);
-            mfa.newAccount(userName);
+            log.addMsg(0,"New account added" , decryptedName);
+            mfa.newAccount(decryptedName);
         } else{
-            log.addMsg(1,"Failed to add user" , userName);
-        }
-        return result;
-    }
-    
-    public boolean changePassword(String userName, String password, String oldPassword) throws RemoteException
-    {
-        boolean result =  pM.changePassword(userName, password, oldPassword);
-        if(result) {
-            log.addMsg(0,"Password changed" , userName);
-        } else{
-            log.addMsg(1,"Failed to change password" , userName);
-        }
-        return result;
-    }
-    
-    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
-    {
-        boolean result =  pM.addPermission(userName, perm, adminUserName, adminPass);
-        if(result) {
-            String email = "f2.scc363@gmail.com";//username;
-            mfa.permissionsUpdated(email);
-            log.addMsg(0,"Users permissions changed" , userName);
-        } else{
-            log.addMsg(2,"Failed to change users permissions" , userName);
-        }
-        return result;
-    }
-    
-    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass) throws RemoteException
-    {
-        boolean result =  pM.removePermission(userName, perm, adminUserName, adminPass);
-        if(result) {
-            String email = "f2.scc363@gmail.com";//username;
-            mfa.permissionsUpdated(email);
-            log.addMsg(0,"Users permissions changed" , userName);
-        } else{
-            log.addMsg(2,"Failed to change users permissions" , userName);
+            log.addMsg(1,"Failed to add user" , decryptedName);
         }
         return result;
     }
 
-    public boolean isPermitted(String userName, int perm) throws RemoteException
+    //int i = 1;
+    //String ii = Integer.toString(i);
+    //int j = Integer.parseInt(ii);
+
+    public boolean changePassword(String userName, String password, String oldPassword) throws RemoteException
     {
-        return pM.isPermitted(userName, perm);
+        String decryptedName = decryptMessage(userName);
+        String decryptedOldPassword = decryptMessage(password);
+        String decryptedNewPassword = decryptMessage(oldPassword);
+
+        boolean result =  pM.changePassword(decryptedName, decryptedOldPassword, decryptedNewPassword);
+        if(result) {
+            log.addMsg(0,"Password changed" , decryptedName);
+        } else{
+            log.addMsg(1,"Failed to change password" , decryptedName);
+        }
+        return result;
+    }
+    
+    public boolean addPermission(String userName, String perm, String adminUserName, String adminPass) throws RemoteException
+    {
+        String decryptedName = decryptMessage(userName);
+        String decryptedAdminName = decryptMessage(adminUserName);
+        String decryptedAdminPassword = decryptMessage(adminPass);
+        String decryptedPerm = decryptMessage(perm);
+        int finalPerm = Integer.parseInt(decryptedPerm);
+
+        boolean result =  pM.addPermission(decryptedName, finalPerm, decryptedAdminName, decryptedAdminPassword);
+        if(result) {
+            String email = "f2.scc363@gmail.com";//username;
+            mfa.permissionsUpdated(email);
+            log.addMsg(0,"Users permissions changed" , decryptedName);
+        } else{
+            log.addMsg(2,"Failed to change users permissions" , decryptedName);
+        }
+        return result;
+    }
+    
+    public boolean removePermission(String userName, String perm, String adminUserName, String adminPass) throws RemoteException
+    {
+        String decryptedName = decryptMessage(userName);
+        String decryptedAdminName = decryptMessage(adminUserName);
+        String decryptedAdminPassword = decryptMessage(adminPass);
+        String decryptedPerm = decryptMessage(perm);
+        int finalPerm = Integer.parseInt(decryptedPerm);
+
+        boolean result =  pM.removePermission(decryptedName, finalPerm, decryptedAdminName, decryptedAdminPassword);
+        if(result) {
+            String email = "f2.scc363@gmail.com";//username;
+            mfa.permissionsUpdated(email);
+            log.addMsg(0,"Users permissions changed" , decryptedName);
+        } else{
+            log.addMsg(2,"Failed to change users permissions" , decryptedName);
+        }
+        return result;
+    }
+
+    public boolean isPermitted(String userName, String perm) throws RemoteException
+    {
+        String decryptedName = decryptMessage(userName);
+        String decryptedPerm = decryptMessage(perm);
+        int finalPerm = Integer.parseInt(decryptedPerm);
+        return pM.isPermitted(decryptedName, finalPerm);
     }
 
     public void clearPermissions(String userName, String adminUserName, String adminPass) throws RemoteException
@@ -220,18 +344,23 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         pM.clearPermissions(userName, adminUserName, adminPass);
     }
 
-    public int getRole(String userName) throws RemoteException
+    public String getRole(String userName) throws RemoteException
     {
-        return pM.getRole(userName);
+        String decryptedName = decryptMessage(userName);
+        //return pM.getRole(decryptedName);
+        return encryptMessage(Integer.toString(pM.getRole(decryptedName)));
     }
 
     public boolean isPasswordValid(String username, String password) throws RemoteException {
-        return pM.checkIfPasswordIsCorrect(username, password);
+        String decryptedName = decryptMessage(username);
+        String decryptedPassword = decryptMessage(password);
+        return pM.checkIfPasswordIsCorrect(decryptedName, decryptedPassword);
     }
 
     @Override
     public boolean isPasswordStrong(String password) throws RemoteException {
-        return passwordEvaluator.checkPasswordStrength(password);
+        String decryptedPassword = decryptMessage(password);
+        return passwordEvaluator.checkPasswordStrength(decryptedPassword);
     }
 
     public LinkedList<String> getAllUsers() throws RemoteException

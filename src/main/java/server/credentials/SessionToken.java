@@ -16,13 +16,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class SessionToken {
 
-    private String ErrInvalidSession = "Invalid or expired session token";
-    private Random random;
-    private byte[] stringBytes;
-    private StringBuffer stringBuffer;
-    private String hexString;
+    private String invalidSession = "Invalid or expired session token";
 
-    public HashMap<SecretKey, LocalDateTime> sessionTokens = new HashMap<>();
+    //public HashMap<SecretKey, LocalDateTime> sessionTokens = new HashMap<>();
+    private SecretKey sessionToken;
+    private LocalDateTime tokenTime;
 
     public String keyToString(SecretKey token)
     {
@@ -39,7 +37,7 @@ public class SessionToken {
     {
     }
 
-    public boolean tokenExists(String sessionToken)
+    /*public boolean tokenExists(String sessionToken)
     {
         SecretKey key = this.stringToKey(sessionToken);
 
@@ -48,7 +46,7 @@ public class SessionToken {
             return true;
         }
         else return false;
-    }
+    }*/
 
 
     /**
@@ -60,9 +58,8 @@ public class SessionToken {
     {
         SecretKey key = this.stringToKey(sessionToken);
 
-        if(sessionTokens.containsKey(key))
+        if(this.sessionToken.equals(sessionToken))
         {
-            LocalDateTime tokenTime = sessionTokens.get(key);
             LocalDateTime currentTime = LocalDateTime.now();
 
             //Find the time between when the token was generated an the current time
@@ -73,7 +70,9 @@ public class SessionToken {
                 return true;
             }
             else{
-                sessionTokens.remove(key); //Remove the expired sessionToken
+                sessionToken = null;
+                tokenTime = null;
+                //Remove the expired sessionToken
                 return false;
             }
         }
@@ -86,22 +85,23 @@ public class SessionToken {
 
     /**
      * This method creates a new session token
-     * @param username The current users' username
      * @return The newly creatred session token
      */
-    public String createSessionTokenString(String username) throws NoSuchAlgorithmException {
+    public String createSessionTokenString() throws NoSuchAlgorithmException {
         //The sessionToken is a randomly generated string and a username
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         SecureRandom secureRandom = new SecureRandom();
         keyGenerator.init(128, secureRandom);
         SecretKey sessionToken = keyGenerator.generateKey();
 
-        sessionTokens.put(sessionToken, LocalDateTime.now());
+        //sessionTokens.put(sessionToken, LocalDateTime.now());
+        tokenTime = LocalDateTime.now();
+        this.sessionToken = sessionToken;
 
         return this.keyToString(sessionToken);
     }
 
-    public SecretKey createSessionTokenKey(String username) throws NoSuchAlgorithmException {
+    /*public SecretKey createSessionTokenKey(String username) throws NoSuchAlgorithmException {
         //The sessionToken is a randomly generated string and a username
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         SecureRandom secureRandom = new SecureRandom();
@@ -111,6 +111,16 @@ public class SessionToken {
         sessionTokens.put(sessionToken, LocalDateTime.now());
 
         return sessionToken;
+    }*/
+
+    public SecretKey returnSessionTokenKey()
+    {
+        return sessionToken;
+    }
+
+    public String returnSessionTokenString()
+    {
+        return this.keyToString(sessionToken);
     }
 
 
@@ -122,7 +132,9 @@ public class SessionToken {
     {
         if (this.isTokenValid(token))
         {
-            sessionTokens.remove(this.stringToKey(token));
+            sessionToken = null;
+            tokenTime = null;
+            //sessionTokens.remove(this.stringToKey(token));
         }
     }
 

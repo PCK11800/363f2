@@ -6,6 +6,7 @@ import client.components.AppColors;
 import client.components.font.Inconsolata;
 import client.pages.AccountManager;
 import client.pages.Permissions;
+import server.credentials.SessionToken;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -25,10 +26,12 @@ public class UsersList extends JPanel {
     private Client client;
     private int width, height;
     private int mode; //0 = dataEditor, 1 = accountManager
+    private SessionToken token;
 
     public UsersList(Permissions permissions, int width, int height)
     {
         this.permissions = permissions;
+        this.token = permissions.getSession();
         this.mode = 0;
         this.client = permissions.getClient();
         this.width = width;
@@ -40,6 +43,7 @@ public class UsersList extends JPanel {
     public UsersList(AccountManager accountManager, int width, int height)
     {
         this.accountManager = accountManager;
+        this.token = accountManager.getSession();
         this.mode = 1;
         this.client = accountManager.getClient();
         this.width = width;
@@ -188,7 +192,9 @@ public class UsersList extends JPanel {
                     {
                         int person = 0;
                         try {
-                            person = client.bI().getRole(nameButton.getText());
+                            //person = client.bI().getRole(nameButton.getText());
+                            String encryptedPerson = client.bI().getRole(client.encryptMessage(nameButton.getText(), token.returnSessionTokenKey()));
+                            person = Integer.parseInt(client.decryptMessage(encryptedPerson, token.returnSessionTokenKey()));
                         } catch (RemoteException remoteException) {
                             remoteException.printStackTrace();
                         }

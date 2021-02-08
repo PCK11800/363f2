@@ -43,24 +43,24 @@ public interface BackendInterface extends Remote {
     public boolean changePassword(String userName, String password, String oldPassword)
         throws java.rmi.RemoteException;
 
-    public boolean addPermission(String userName, int perm, String adminUserName, String adminPass)
+    public boolean addPermission(String userName, String perm, String adminUserName, String adminPass)
         throws java.rmi.RemoteException;
 
-    public boolean removePermission(String userName, int perm, String adminUserName, String adminPass)
+    public boolean removePermission(String userName, String perm, String adminUserName, String adminPass)
         throws java.rmi.RemoteException;
 
-    public boolean isPermitted(String userName, int perm)
+    public boolean isPermitted(String userName, String perm)
         throws java.rmi.RemoteException;
 
     public void clearPermissions(String userName, String adminUserName, String adminPass)
         throws java.rmi.RemoteException;
 
-    public boolean newAccount(String userName, String password, int role) throws RemoteException;
+    public boolean newAccount(String userName, String password, String role) throws RemoteException;
 
     public boolean deleteUser(String userName)
         throws java.rmi.RemoteException;
     
-    public int getRole(String userName)
+    public String getRole(String userName)
         throws java.rmi.RemoteException;
 
     public boolean isPasswordValid(String username, String password) throws RemoteException;

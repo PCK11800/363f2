@@ -3,7 +3,9 @@ package client.pages;
 import client.Client;
 import client.components.AppButton;
 import client.components.AppColors;
+import server.credentials.SessionToken;
 
+import javax.crypto.SecretKey;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +15,13 @@ public class TaskSelection extends JPanel {
 
     private Client client;
     private String username;
+    private SessionToken token;
+    private String session;
 
-    public TaskSelection(String username, Client client)
+    public TaskSelection(String username, Client client, SessionToken sessionToken)
     {
+        token = sessionToken;
+        session = token.returnSessionTokenString();
         this.client = client;
         this.username = username;
         initUI();
@@ -45,7 +51,7 @@ public class TaskSelection extends JPanel {
         data.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initDataEditor(username);
+                client.initDataEditor(username, token);
             }
         });
         add(data);
@@ -56,7 +62,7 @@ public class TaskSelection extends JPanel {
         accountManagement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initAccountManager(username);
+                client.initAccountManager(username, token);
             }
         });
         add(accountManagement);
@@ -67,7 +73,7 @@ public class TaskSelection extends JPanel {
         assignPermissions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initPermissions(username);
+                client.initPermissions(username, token);
             }
         });
         add(assignPermissions);
@@ -84,7 +90,10 @@ public class TaskSelection extends JPanel {
         add(logout);
 
         try {
-            if(client.bI().getRole(username) != 3)
+            //if(client.bI().getRole(username) != 3)
+            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()));
+            int role = Integer.parseInt(client.decryptMessage(encryptedRole, token.returnSessionTokenKey()));
+            if(role != 3)
             {
                 assignPermissions.setEnabled(false);
             }

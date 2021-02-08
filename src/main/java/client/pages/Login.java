@@ -81,6 +81,8 @@ public class Login extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String username = user_field.getText();
                 String password = password_field.getText();
+                user_field.setText("f2.scc363@gmail.com");
+                password_field.setText("tY,?S5b&7Xn{)NR@");
 
                 try {
                     boolean login_valid = client.bI().login(username, password);
@@ -117,7 +119,7 @@ public class Login extends JPanel {
             String encrypted = Base64.getEncoder().encodeToString(encValue);
             client.bI().exchangeMessages(encrypted);
 
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | RemoteException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -126,7 +128,7 @@ public class Login extends JPanel {
     {
         try {
             PublicKey serverPublic = client.bI().getServerPublic();
-            this.sessionKey = token.createSessionTokenString(username);
+            this.sessionKey = token.createSessionTokenString();
 
             //encrypt session key with server's public key
             EncryptSessionKey encryptSessionKey = new EncryptSessionKey(serverPublic);
@@ -171,7 +173,7 @@ public class Login extends JPanel {
         String authenticationCode = "null"; //Default invalid - can't have 7 digit codes
         try
         {
-            authenticationCode = client.bI().sendAuthenticationCode(username);
+            authenticationCode = client.decryptMessage(client.bI().sendAuthenticationCode(client.encryptMessage(username, token.stringToKey(sessionKey))), token.stringToKey(sessionKey));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -216,7 +218,7 @@ public class Login extends JPanel {
                     System.out.println("Login successful");
                     removeAll();
                     repaint();
-                    client.initTaskSelection(username);
+                    client.initTaskSelection(username, token);
                 }
                 else
                 {

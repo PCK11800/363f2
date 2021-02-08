@@ -6,6 +6,7 @@ import client.components.AppColors;
 import client.components.font.Inconsolata;
 import client.pages.components.Editor;
 import client.pages.components.NamesList;
+import server.credentials.SessionToken;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,9 +20,11 @@ public class DataEditor extends JPanel {
     private Client client;
     private String username;
     private String[] currentSelectedPerson = null;
+    private SessionToken token;
 
-    public DataEditor(String username, Client client)
+    public DataEditor(String username, Client client, SessionToken sessionToken)
     {
+        this.token = sessionToken;
         this.client = client;
         this.username = username;
 
@@ -243,7 +246,7 @@ public class DataEditor extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 removeAll();
                 repaint();
-                client.initTaskSelection(username);
+                client.initTaskSelection(username, token);
             }
         });
         add(goBack);
@@ -272,8 +275,9 @@ public class DataEditor extends JPanel {
         newPerson[5] = email.getText();
         newPerson[6] = phoneNumber.getText();
         newPerson[7] = editor.getTextArea().getText();
+        String[] encryptedNewPerson = client.encryptArrayMessage(newPerson, token.returnSessionTokenKey());
         try {
-            client.bI().storePerson(newPerson);
+            client.bI().storePerson(encryptedNewPerson);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -297,7 +301,8 @@ public class DataEditor extends JPanel {
         currentSelectedPerson = null;
         try {
             System.out.println("Delete command - Client");
-            client.bI().deletePerson(name);
+            //client.bI().deletePerson(name);
+            client.bI().deletePerson(client.encryptMessage(name, token.returnSessionTokenKey()));
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -307,12 +312,14 @@ public class DataEditor extends JPanel {
     {
         try {
             //View Personal data
-            if(client.bI().isPermitted(username, 1))
+            //if(client.bI().isPermitted(username, 1))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(1), token.returnSessionTokenKey())))
             {
                 name.setEnabled(true);
             }
             //Edit Personal Data
-            if(client.bI().isPermitted(username, 2))
+            //if(client.bI().isPermitted(username, 2))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(2), token.returnSessionTokenKey())))
             {
                 name.setEditable(true);
                 gender.setEditable(true);
@@ -326,17 +333,22 @@ public class DataEditor extends JPanel {
                 savePerson.setEnabled(true);
             }
             //View Medical Data
-            if(client.bI().isPermitted(username, 3))
+            //if(client.bI().isPermitted(username, 3))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(3), token.returnSessionTokenKey())))
             {
                 editor.enableEditor();
             }
             //Edit Medical Data
-            if(client.bI().isPermitted(username, 4))
+            //if(client.bI().isPermitted(username, 4))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(4), token.returnSessionTokenKey())))
             {
                 editor.enableEditor();
                 editor.getTextArea().setEditable(true);
             }
-            if(client.bI().getRole(username) == 3)
+            //if(client.bI().getRole(username) == 3)
+            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()));
+            int role = Integer.parseInt(client.decryptMessage(encryptedRole, token.returnSessionTokenKey()));
+            if(role == 3)
             {
                 addNewPerson.setEnabled(true);
                 deletePerson.setEnabled(true);
@@ -355,4 +367,6 @@ public class DataEditor extends JPanel {
     {
         return username;
     }
+
+    public SessionToken getSession() {return token; }
 }

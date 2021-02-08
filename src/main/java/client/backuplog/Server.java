@@ -1,3 +1,5 @@
+package client.backuplog;
+
 import org.jgroups.JChannel;
 
 import java.io.File;

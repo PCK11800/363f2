@@ -5,6 +5,7 @@ import client.components.AppButton;
 import client.components.AppColors;
 import client.components.font.Inconsolata;
 import client.pages.components.UsersList;
+import server.credentials.SessionToken;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +20,11 @@ public class Permissions extends JPanel {
     private String username;
     private int userRole = -1;
     private String currentSelectedUser = null;
+    private SessionToken token;
 
-    public Permissions(String username, Client client)
+    public Permissions(String username, Client client, SessionToken sessionToken)
     {
+        this.token = sessionToken;
         this.client = client;
         this.username = username;
 
@@ -166,10 +169,12 @@ public class Permissions extends JPanel {
 
                 try {
                     for(int i: added){
-                        client.bI().addPermission(currentSelectedUser, i, username, client.getAdmin_password());
+                        //client.bI().addPermission(currentSelectedUser, i, username, client.getAdmin_password());
+                        client.bI().addPermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
                     }
                     for(int i: removed){
-                        client.bI().removePermission(currentSelectedUser, i, username, client.getAdmin_password());
+                        //client.bI().removePermission(currentSelectedUser, i, username, client.getAdmin_password());
+                        client.bI().removePermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
                     }
                 } catch (RemoteException re) {
                     re.printStackTrace();
@@ -187,7 +192,7 @@ public class Permissions extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 removeAll();
                 repaint();
-                client.initTaskSelection(username);
+                client.initTaskSelection(username, token);
             }
         });
         add(goBack);
@@ -231,7 +236,8 @@ public class Permissions extends JPanel {
         for(int i = 1; i < 6; i++)
         {
             try {
-                if(client.bI().isPermitted(currentSelectedUser, i))
+                //if(client.bI().isPermitted(currentSelectedUser, i))
+                if(client.bI().isPermitted(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey())))
                 {
                     switch(i)
                     {
@@ -257,6 +263,8 @@ public class Permissions extends JPanel {
             }
         }
     }
+
+    public SessionToken getSession() { return token; }
 
     public Client getClient()
     {
