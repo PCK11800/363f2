@@ -19,6 +19,7 @@ public class BackupClass {
         }
     }
 
+    // CALL THIS METHOD TO CREATE A BACKUP:
     public static void createBackup(){
 
         try
@@ -31,6 +32,7 @@ public class BackupClass {
         }
     }
 
+    // CALL THIS METHOD TO GET THE BACKUP LOCATION:
     public static void getBackup()
     {
         try
