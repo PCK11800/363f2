@@ -5,7 +5,7 @@ import java.rmi.registry.LocateRegistry;
 // Steps:
 // 1. Run Main.java
 // 2. Run Server.java
-// 3. Run BackupClass.java main method, and then needed method (createBackup() or getBackup())
+// 3. Run BackupClass.java main method, and then needed method (createBackup() or getBackup()) in that same class
 
 // The Jgroups .jar file needs to be used as well.
 
