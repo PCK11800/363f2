@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
 import org.jgroups.ReceiverAdapter;
+import org.jgroups.blocks.RpcDispatcher;
 
 public class Server extends ReceiverAdapter {
 
