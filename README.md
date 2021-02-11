@@ -2,7 +2,8 @@
 
 If running the code please use an IDE such as IntellijJ.
 Make sure all dependencies are downloaded.
-Run ‘RunBothServerAndClient’. 
+
+To run the project, run the file ‘RunBothServerAndClient’. 
 
 Dependencies:
 javax.mail
@@ -11,6 +12,14 @@ com.google.code.gson
 org.jgroups
 
 rmiregistry is also used, please make sure this is downloaded
+
+To find the session code without logging in to the email look in the terminal.
+After entering a corrects username/ password combination this will print:
+
+EXAMPLE CODE:
+-----------------------------------------------------
+Authentication Code: 714558
+-----------------------------------------------------
 
 /*
  * USER ACCOUNTS FOR TESTING
