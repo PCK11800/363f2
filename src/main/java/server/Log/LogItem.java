@@ -1,5 +1,6 @@
 package server.Log;
 
+
 import java.io.Serializable;
 
 public class LogItem implements Serializable{
@@ -31,7 +32,12 @@ public class LogItem implements Serializable{
                 break;    
         }
         str = str + "[" + user + "] ";
-        return str + desc + " Hash: " + hash.toString() +'\n';
+        try {
+            return str + desc + " Hash: " + hash.toString() +'\n';
+        } catch (Exception e) {
+            System.out.println("Hash has not yet been assigned")
+            return str + desc + '\n';
+        }
     }
 
     public byte[] getHash()
