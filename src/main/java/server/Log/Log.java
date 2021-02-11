@@ -8,18 +8,26 @@ import java.util.LinkedList;
 import java.security.MessageDigest;
 import java.util.*;
 import java.io.*;
+
 public class Log {
-    private LinkedList<LogItem> log = loadLog();
-    private BackupLog backupLog = new BackupLog();
+    private LinkedList<LogItem> logItems = loadLog();
+    private BackupLog backupLog;
     private Server backupLogServer;
     private ServerCaller serverCaller;
+
     public Log(){
         try {
+            backupLog = new BackupLog();
             backupLogServer = new Server();
             serverCaller = new ServerCaller();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Log(boolean viewerMode)
+    {
+
     }
 
     public boolean addMsg(int type, String desc, String user)
@@ -31,12 +39,12 @@ public class Log {
         try {
             byte[] hash;
             LogItem lI = new LogItem(type, desc, null, user);
-            log.add(lI);
+            logItems.add(lI);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            hash = digest.digest(log.toString().getBytes());
-            log.removeLast();
+            hash = digest.digest(logItems.toString().getBytes());
+            logItems.removeLast();
             lI = new LogItem(type, desc, hash, user);
-            log.add(lI);
+            logItems.add(lI);
             saveLog();
             return true;
         } catch (Exception e) {
@@ -48,7 +56,7 @@ public class Log {
     public String toString()
     {
         String str = "";
-        for (Iterator i = log.iterator(); i.hasNext();) {
+        for (Iterator i = logItems.iterator(); i.hasNext();) {
             str = str + i.next().toString();
         }
 
@@ -58,7 +66,7 @@ public class Log {
     public String getMsgsOfType(int type)
     {
         String str = "";
-        for (Iterator i = log.iterator(); i.hasNext();) {
+        for (Iterator i = logItems.iterator(); i.hasNext();) {
             LogItem lI = (LogItem) i.next();
             if(lI.getType() == type){
                 str = str + lI.toString();
@@ -74,7 +82,7 @@ public class Log {
             System.out.println("Save Log Method Called");
             FileOutputStream FOS = new FileOutputStream(new File("data/log/Log.txt"));
             ObjectOutputStream OOS = new ObjectOutputStream(FOS);
-            OOS.writeObject(log);
+            OOS.writeObject(logItems);
             FOS.close();
             OOS.close();
 
@@ -100,8 +108,14 @@ public class Log {
         }
     }
 
+    public void printLogs()
+    {
+        loadLog();
+        System.out.println(toString());
+    }
+
     public static void main(String[] args)
     {
-        new Log().saveLog();
+        new Log().printLogs();
     }
 }
