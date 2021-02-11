@@ -8,7 +8,6 @@ import java.rmi.registry.LocateRegistry;
 // 2. Run Server.java
 // 3. Run BackupClass.java
 
-// The Jgroups .jar file needs to be used as well.
 
 public class BackupLog
 {

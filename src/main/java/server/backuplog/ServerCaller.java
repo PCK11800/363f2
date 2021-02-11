@@ -39,6 +39,7 @@ public class ServerCaller extends UnicastRemoteObject implements BackupInterface
 
     public synchronized void createBackup(File file) throws Exception
     {
+        System.out.println("Backup Log Created");
         disp.callRemoteMethods(null, "createBackup",
                 new Object[]{file},
                 new Class[]{File.class}, rqstOpts);

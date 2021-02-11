@@ -35,7 +35,7 @@ public class LogItem implements Serializable{
         try {
             return str + desc + " Hash: " + hash.toString() +'\n';
         } catch (Exception e) {
-            System.out.println("Hash has not yet been assigned")
+            System.out.println("Hash has not yet been assigned");
             return str + desc + '\n';
         }
     }

@@ -2,6 +2,7 @@ package server.Log;
 
 import server.backuplog.BackupClass;
 import server.backuplog.BackupLog;
+import server.backuplog.Server;
 import server.backuplog.ServerCaller;
 
 import java.util.LinkedList;
@@ -12,9 +13,11 @@ import java.io.*;
 public class Log {
     private LinkedList<LogItem> log = loadLog();
     private BackupLog backupLog = new BackupLog();
+    private Server backupLogServer;
     private ServerCaller serverCaller;
     public Log(){
         try {
+            backupLogServer = new Server();
             serverCaller = new ServerCaller();
         } catch (Exception e) {
             e.printStackTrace();
