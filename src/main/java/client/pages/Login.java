@@ -88,7 +88,7 @@ public class Login extends JPanel {
                     if(login_valid)
                     {
                         credentialNegotiation(username);
-                        sendMessageToServer("Hi Server", username);
+                        sendMessageToServer("Client Connected", username);
                         //client.setPassword(password);
                         client.setAdmin_password(password);
                         initMultifactorAuthentication(username);

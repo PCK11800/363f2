@@ -156,7 +156,6 @@ public class Client extends JFrame {
             c.init(Cipher.DECRYPT_MODE, sessionKey);
             byte[] decryptedBytes = c.doFinal(Base64.getDecoder().decode(encryptedMessage));
             decrypted = new String(decryptedBytes);
-            System.out.println(decrypted);
         } catch(Exception e) {
             e.printStackTrace();
         }
