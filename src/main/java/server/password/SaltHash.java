@@ -30,7 +30,7 @@ public class SaltHash implements Serializable{
     {
         if(!permissions.contains(perm) && perm >= 1 && perm <=8)
         {
-            System.out.println("Permission " + perm + " was addded");
+            System.out.println("Permission " + perm + " was added");
             return permissions.add(perm);
         }
         return false;

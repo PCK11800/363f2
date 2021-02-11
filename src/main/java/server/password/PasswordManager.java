@@ -223,7 +223,7 @@ public class PasswordManager{
         }
 
         if(!success)
-            System.out.println("Adding of permission was unsucessful");
+            System.out.println("Adding of permission was unsuccessful");
 
         return success;
     }

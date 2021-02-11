@@ -30,7 +30,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     private PublicKey serverPublicKey;
     private PrivateKey serverPrivateKey;
-    //private SecretKey sessionKey = null;
     private HashMap<String, SecretKey> sessionTokens = new HashMap<>();
 
 
@@ -143,7 +142,7 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     public void generateServerKeys() throws java.rmi.RemoteException
     {
-        try (FileOutputStream fos = new FileOutputStream("data/keys/keyS.ks");)
+        try
         {
             KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");
             SecureRandom secureRandom = new SecureRandom();
@@ -151,22 +150,8 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
             KeyPair keyPair = keyGenerator.generateKeyPair();
             serverPublicKey = keyPair.getPublic();
             serverPrivateKey = keyPair.getPrivate();
-
-            /*
-            char[] pass = "password".toCharArray();
-            String alias = "privateKey";
-            X509Certificate certificate = generateCertificate(keyPair);
-            Certificate[] chain = new Certificate[1];
-            chain[0] = certificate;
-
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(null, pass);
-
-            keyStore.setKeyEntry(alias, new KeyStore.SecretKeyEntry(keyPair.getPrivate), pass, chain);
-            keyStore.store(fos, pass);
-            */
-        }
-        catch (IOException | GeneralSecurityException e)
+                    }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -288,7 +273,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
 
     public boolean changePassword(String userName, String password, String oldPassword) throws RemoteException
     {
-        //String decryptedName = decryptMessage(userName);
         String decryptedOldPassword = decryptMessage(password, getSessionKey(userName));
         String decryptedNewPassword = decryptMessage(oldPassword, getSessionKey(userName));
 
@@ -304,7 +288,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     public boolean addPermission(String userName, String perm, String adminUserName, String adminPass) throws RemoteException
     {
         String decryptedName = decryptMessage(userName, getSessionKey(adminUserName));
-        //String decryptedAdminName = decryptMessage(adminUserName);
         String decryptedAdminPassword = decryptMessage(adminPass, getSessionKey(adminUserName));
         String decryptedPerm = decryptMessage(perm, getSessionKey(adminUserName));
         int finalPerm = Integer.parseInt(decryptedPerm);
@@ -323,7 +306,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     public boolean removePermission(String userName, String perm, String adminUserName, String adminPass) throws RemoteException
     {
         String decryptedName = decryptMessage(userName, getSessionKey(adminUserName));
-        //String decryptedAdminName = decryptMessage(adminUserName);
         String decryptedAdminPassword = decryptMessage(adminPass, getSessionKey(adminUserName));
         String decryptedPerm = decryptMessage(perm, getSessionKey(adminUserName));
         int finalPerm = Integer.parseInt(decryptedPerm);
@@ -359,7 +341,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
     public String getRole(String userName, String currentUserName) throws RemoteException
     {
         String decryptedName = decryptMessage(userName, getSessionKey(currentUserName));
-        //return pM.getRole(decryptedName);
         return encryptMessage(Integer.toString(pM.getRole(decryptedName)), getSessionKey(currentUserName));
     }
 

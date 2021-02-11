@@ -169,11 +169,9 @@ public class Permissions extends JPanel {
 
                 try {
                     for(int i: added){
-                        //client.bI().addPermission(currentSelectedUser, i, username, client.getAdmin_password());
                         client.bI().addPermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), username, client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
                     }
                     for(int i: removed){
-                        //client.bI().removePermission(currentSelectedUser, i, username, client.getAdmin_password());
                         client.bI().removePermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), username, client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
                     }
                 } catch (RemoteException re) {

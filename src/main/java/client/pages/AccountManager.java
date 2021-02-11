@@ -101,12 +101,10 @@ public class AccountManager extends JPanel {
                 boolean isPasswordStrong = false;
 
                 try {
-                    //if(client.bI().isPasswordValid(username, oldPassword_str))
                     if(client.bI().isPasswordValid(username, client.encryptMessage(oldPassword_str, token.returnSessionTokenKey())))
                     {
                         isPasswordValid = true;
                     }
-                    //if(client.bI().isPasswordStrong(newPassword_str))
                     if(client.bI().isPasswordStrong(username, client.encryptMessage(newPassword_str, token.returnSessionTokenKey())))
                     {
                         isPasswordStrong = true;
@@ -123,7 +121,6 @@ public class AccountManager extends JPanel {
 
                     if(isPasswordStrong && isPasswordValid)
                     {
-                        //client.bI().changePassword(username, newPassword_str, oldPassword_str);
                         client.bI().changePassword(username, client.encryptMessage(newPassword_str, token.returnSessionTokenKey()), client.encryptMessage(oldPassword_str, token.returnSessionTokenKey()));
                         setPassword.setText("Password Changed!");
                     }
@@ -206,7 +203,6 @@ public class AccountManager extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 boolean success = false;
                 try {
-                    //success = client.bI().deleteUser(currentSelectedUser);
                     success = client.bI().deleteUser(client.encryptMessage(currentSelectedUser,token.returnSessionTokenKey()), username);
                     usersList.refresh();
                 } catch (RemoteException remoteException) {
@@ -292,7 +288,6 @@ public class AccountManager extends JPanel {
                 else
                 {
                     try {
-                        //if(client.bI().newAccount(newUsername, newPassword, role))
                         if(client.bI().newAccount(client.encryptMessage(newUsername,token.returnSessionTokenKey()), client.encryptMessage(newPassword,token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(role),token.returnSessionTokenKey()), username))
                         {
                             createUser.setText("User created!");
@@ -370,7 +365,6 @@ public class AccountManager extends JPanel {
 
         int role = -1;
         try {
-            //role = client.bI().getRole(currentSelectedUser);
             String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()), username);
             role = Integer.parseInt(client.decryptMessage(encryptedRole, token.returnSessionTokenKey()));
         } catch (RemoteException e) {

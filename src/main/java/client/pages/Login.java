@@ -81,8 +81,6 @@ public class Login extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String username = user_field.getText();
                 String password = password_field.getText();
-                user_field.setText("f2.scc363@gmail.com");
-                password_field.setText("tY,?S5b&7Xn{)NR@");
 
                 try {
                     boolean login_valid = client.bI().login(username, password);

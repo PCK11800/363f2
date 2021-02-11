@@ -301,7 +301,6 @@ public class DataEditor extends JPanel {
         currentSelectedPerson = null;
         try {
             System.out.println("Delete command - Client");
-            //client.bI().deletePerson(name);
             client.bI().deletePerson(client.encryptMessage(name, token.returnSessionTokenKey()), username);
         } catch (RemoteException e) {
             e.printStackTrace();

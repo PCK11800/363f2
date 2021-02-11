@@ -18,7 +18,6 @@ public class SessionToken {
 
     private String invalidSession = "Invalid or expired session token";
 
-    //public HashMap<SecretKey, LocalDateTime> sessionTokens = new HashMap<>();
     private SecretKey sessionToken;
     private LocalDateTime tokenTime;
 
@@ -36,18 +35,6 @@ public class SessionToken {
     public SessionToken()
     {
     }
-
-    /*public boolean tokenExists(String sessionToken)
-    {
-        SecretKey key = this.stringToKey(sessionToken);
-
-        if (sessionTokens.containsKey(key))
-        {
-            return true;
-        }
-        else return false;
-    }*/
-
 
     /**
      * A token is valid if it exists and is less than 12 hours old.
@@ -85,7 +72,7 @@ public class SessionToken {
 
     /**
      * This method creates a new session token
-     * @return The newly creatred session token
+     * @return The newly created session token
      */
     public String createSessionTokenString() throws NoSuchAlgorithmException {
         //The sessionToken is a randomly generated string and a username
@@ -100,18 +87,6 @@ public class SessionToken {
 
         return this.keyToString(sessionToken);
     }
-
-    /*public SecretKey createSessionTokenKey(String username) throws NoSuchAlgorithmException {
-        //The sessionToken is a randomly generated string and a username
-        KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-        SecureRandom secureRandom = new SecureRandom();
-        keyGenerator.init(128, secureRandom);
-        SecretKey sessionToken = keyGenerator.generateKey();
-
-        sessionTokens.put(sessionToken, LocalDateTime.now());
-
-        return sessionToken;
-    }*/
 
     public SecretKey returnSessionTokenKey()
     {
@@ -134,43 +109,7 @@ public class SessionToken {
         {
             sessionToken = null;
             tokenTime = null;
-            //sessionTokens.remove(this.stringToKey(token));
         }
     }
 
-
-    /*public static void main(String[] args)
-    {
-        SessionToken s = new SessionToken();
-        String token = s.createSessionToken("Stanci");
-
-        byte[] test = s.generateToken();
-        System.out.println(test);
-        System.out.println(s.btoString(test));
-        System.out.println(s.bytesToString(test));
-
-        //System.out.println(token);
-
-        if (s.isTokenValid(token))
-        {
-            //System.out.println("The session is valid");
-        } else {
-            //System.out.println("The session is not valid");
-        }
-
-        /*try
-        {
-            TimeUnit.MINUTES.sleep(1);
-        }
-        catch (InterruptedException e)
-        {
-        }
-
-        if (s.isTokenValid(token))
-        {
-            System.out.println("The session is valid");
-        } else {
-            System.out.println("The session is has expired");
-        }
-    }*/
 }
