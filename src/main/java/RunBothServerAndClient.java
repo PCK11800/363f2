@@ -1,5 +1,6 @@
 import client.Client;
 import server.Server;
+import server.backuplog.BackupLog;
 
 public class RunBothServerAndClient {
 
@@ -7,5 +8,6 @@ public class RunBothServerAndClient {
     {
         Server server = new Server();
         Client client = new Client();
+        BackupLog backupLog = new BackupLog();
     }
 }

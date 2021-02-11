@@ -60,12 +60,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PasswordLogic" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="server.password.PasswordLogic" />
+    <configuration name="Log" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="server.Log.Log" />
       <module name="363f2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="server.password.*" />
+          <option name="PATTERN" value="server.Log.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -109,10 +109,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.RunBothServerAndClient" />
+        <item itemvalue="Application.Log" />
         <item itemvalue="Application.PasswordManager" />
         <item itemvalue="Application.Client" />
         <item itemvalue="Application.Server" />
-        <item itemvalue="Application.PasswordLogic" />
       </list>
     </recent_temporary>
   </component>
@@ -159,22 +159,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1611857444267" />
-    <state width="1877" height="167" key="GridCell.Tab.0.bottom" timestamp="1612532643111">
+    <state width="1877" height="69" key="GridCell.Tab.0.bottom" timestamp="1613051055713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="167" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1612532643111" />
-    <state width="1877" height="167" key="GridCell.Tab.0.center" timestamp="1612532643110">
+    <state width="1877" height="69" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1613051055713" />
+    <state width="1877" height="69" key="GridCell.Tab.0.center" timestamp="1613051055713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="167" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1612532643110" />
-    <state width="1877" height="167" key="GridCell.Tab.0.left" timestamp="1612532643110">
+    <state width="1877" height="69" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1613051055713" />
+    <state width="1877" height="69" key="GridCell.Tab.0.left" timestamp="1613051055713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="167" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1612532643110" />
-    <state width="1877" height="167" key="GridCell.Tab.0.right" timestamp="1612532643111">
+    <state width="1877" height="69" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1613051055713" />
+    <state width="1877" height="69" key="GridCell.Tab.0.right" timestamp="1613051055713">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="167" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1612532643111" />
+    <state width="1877" height="69" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1613051055713" />
     <state x="660" y="277" key="refactoring.ChangeSignatureDialog" timestamp="1611858695457">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
