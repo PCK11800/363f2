@@ -32,3 +32,5 @@ rmiregistry is also used, please make sure this is downloaded
  * Username: regulator@sharklasers.com
  * Password: :nTz6<C~QBE8w&y9
  */
+ 
+ To view logs, run LogViewer class.
