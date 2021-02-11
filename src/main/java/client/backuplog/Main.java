@@ -1,3 +1,5 @@
+package client.backuplog;
+
 import java.rmi.registry.LocateRegistry;
 
 // Steps:
