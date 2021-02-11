@@ -1,6 +1,8 @@
 package server.Log;
 
 import server.backuplog.BackupClass;
+import server.backuplog.BackupLog;
+import server.backuplog.ServerCaller;
 
 import java.util.LinkedList;
 import java.security.MessageDigest;
@@ -9,7 +11,15 @@ import java.security.*;
 import java.io.*;
 public class Log {
     private LinkedList<LogItem> log = loadLog();
-    public Log(){}
+    private BackupLog backupLog = new BackupLog();
+    private ServerCaller serverCaller;
+    public Log(){
+        try {
+            serverCaller = new ServerCaller();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public boolean addMsg(int type, String desc, String user)
     {
@@ -29,7 +39,7 @@ public class Log {
             saveLog();
             return true;
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            e.printStackTrace();
             return false;
         }
     }
@@ -55,9 +65,12 @@ public class Log {
         }
         return str;
     }
+
+
     private boolean saveLog()
     {
         try {
+            System.out.println("Save Log Method Called");
             FileOutputStream FOS = new FileOutputStream(new File("data/log/Log.txt"));
             ObjectOutputStream OOS = new ObjectOutputStream(FOS);
             OOS.writeObject(log);
@@ -65,7 +78,8 @@ public class Log {
             OOS.close();
 
             //Backup
-            BackupClass.createBackup();
+            serverCaller.createBackup(new File("data/log/Log.txt"));
+
             return true;
         } catch (Exception e) {
             System.out.println("Log save failed: " + e);

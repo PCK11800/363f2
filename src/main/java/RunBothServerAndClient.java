@@ -8,6 +8,6 @@ public class RunBothServerAndClient {
     {
         Server server = new Server();
         Client client = new Client();
-        BackupLog backupLog = new BackupLog();
+
     }
 }
