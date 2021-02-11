@@ -1,3 +1,5 @@
+package client.backuplog;
+
 import java.io.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
