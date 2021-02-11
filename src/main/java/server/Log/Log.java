@@ -116,6 +116,6 @@ public class Log {
 
     public static void main(String[] args)
     {
-        new Log().printLogs();
+        new Log().saveLog();
     }
 }
