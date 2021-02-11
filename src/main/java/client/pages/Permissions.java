@@ -210,9 +210,9 @@ public class Permissions extends JPanel {
         remove(editPersonalData);
 
         add(viewPersonalData);
+        add(viewDoctorsNote);
         if(userRole == 1 || userRole == 2 || userRole == 3) {
             add(selectOtherPeopleData);
-            add(viewDoctorsNote);
         }
         if(userRole == 1 || userRole == 3) {
             add(editDoctorsNote);
