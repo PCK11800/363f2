@@ -178,8 +178,6 @@ public class NamesList extends JPanel {
                     String[] person = null;
                     String[] encryptedPerson = null;
                     try {
-                        //person = dataEditor.getClient().bI().getPerson(nameButton.getText());
-
                         encryptedPerson = dataEditor.getClient().bI().getPerson(dataEditor.getUsername(), dataEditor.getClient().encryptMessage(nameButton.getText(), dataEditor.getSession().returnSessionTokenKey()));
                         person = dataEditor.getClient().decryptArrayMessage(encryptedPerson, dataEditor.getSession().returnSessionTokenKey());
                     } catch (RemoteException remoteException) {

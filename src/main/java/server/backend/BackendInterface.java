@@ -25,6 +25,7 @@ public interface BackendInterface extends Remote {
     //Sending the encrypted session key to the server
     public void sendSessionKey(byte[] encryptedKey, String username) throws java.rmi.RemoteException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException;
 
+    public void logout(String username) throws RemoteException;
 
     // Returns if login is valid.
     public boolean login(String username, String password) throws RemoteException;

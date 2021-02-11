@@ -152,7 +152,6 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
             serverPublicKey = keyPair.getPublic();
             serverPrivateKey = keyPair.getPrivate();
 
-            //TODO fix storage of private key
             /*
             char[] pass = "password".toCharArray();
             String alias = "privateKey";
@@ -197,6 +196,10 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         sessionTokens.put(username, new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"));
     }
 
+    @Override
+    public void logout(String username) throws RemoteException {
+        sessionTokens.remove(username);
+    }
 
     public boolean login(String username, String password) throws RemoteException {
         boolean loginValid = pM.checkIfPasswordIsCorrect(username, password);
