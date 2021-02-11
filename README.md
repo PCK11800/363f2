@@ -40,6 +40,7 @@ Authentication Code: 714558
  * REGULATOR ACCOUNT
  * Username: regulator@sharklasers.com
  * Password: :nTz6<C~QBE8w&y9
+ 
  */
  
  To view logs, run LogViewer class.
