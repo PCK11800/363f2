@@ -1,7 +1,6 @@
 package server.backend;
 
-import server.Log.Log;
-import server.credentials.SessionToken;
+import server.log.Log;
 import server.data.DataRetriever;
 import server.multifactor.MultifactorAuthenticator;
 import server.password.Evaluation;
@@ -9,13 +8,9 @@ import server.password.PasswordManager;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.rmi.RemoteException;
-import java.rmi.server.RemoteObject;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.*;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedList;

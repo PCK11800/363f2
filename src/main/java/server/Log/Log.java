@@ -1,6 +1,5 @@
-package server.Log;
+package server.log;
 
-import server.backuplog.BackupClass;
 import server.backuplog.BackupLog;
 import server.backuplog.Server;
 import server.backuplog.ServerCaller;
@@ -8,7 +7,6 @@ import server.backuplog.ServerCaller;
 import java.util.LinkedList;
 import java.security.MessageDigest;
 import java.util.*;
-import java.security.*;
 import java.io.*;
 public class Log {
     private LinkedList<LogItem> log = loadLog();

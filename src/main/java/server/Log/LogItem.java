@@ -1,4 +1,4 @@
-package server.Log;
+package server.log;
 
 
 import java.io.Serializable;
