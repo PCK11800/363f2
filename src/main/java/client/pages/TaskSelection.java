@@ -51,7 +51,19 @@ public class TaskSelection extends JPanel {
         data.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initDataEditor(username, token);
+                if (token.isTokenValid())
+                {
+                    client.initDataEditor(username, token);
+                }
+                else
+                {
+                    try {
+                        client.bI().logout(username);
+                    } catch (RemoteException remoteException) {
+                        remoteException.printStackTrace();
+                    }
+                    client.initLogin();
+                }
             }
         });
         add(data);
@@ -62,7 +74,19 @@ public class TaskSelection extends JPanel {
         accountManagement.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initAccountManager(username, token);
+                if (token.isTokenValid())
+                {
+                    client.initAccountManager(username, token);
+                }
+                else
+                {
+                    try {
+                        client.bI().logout(username);
+                    } catch (RemoteException remoteException) {
+                        remoteException.printStackTrace();
+                    }
+                    client.initLogin();
+                }
             }
         });
         add(accountManagement);
@@ -73,7 +97,19 @@ public class TaskSelection extends JPanel {
         assignPermissions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                client.initPermissions(username, token);
+                if (token.isTokenValid())
+                {
+                    client.initPermissions(username, token);
+                }
+                else
+                {
+                    try {
+                        client.bI().logout(username);
+                    } catch (RemoteException remoteException) {
+                        remoteException.printStackTrace();
+                    }
+                    client.initLogin();
+                }
             }
         });
         add(assignPermissions);

@@ -38,33 +38,23 @@ public class SessionToken {
 
     /**
      * A token is valid if it exists and is less than 12 hours old.
-     * @param sessionToken
      * @return Returns true os a session token is valid.
      */
-    public boolean isTokenValid(String sessionToken)
+    public boolean isTokenValid()
     {
-        SecretKey key = this.stringToKey(sessionToken);
+        LocalDateTime currentTime = LocalDateTime.now();
 
-        if(this.sessionToken.equals(sessionToken))
+        //Find the time between when the token was generated an the current time
+        Duration duration = Duration.between(tokenTime, currentTime);
+
+        if (duration.toHours() <= 12) //The token will expire after 12 hours
         {
-            LocalDateTime currentTime = LocalDateTime.now();
-
-            //Find the time between when the token was generated an the current time
-            Duration duration = Duration.between(tokenTime, currentTime);
-
-            if (duration.toHours() <= 12) //The token will expire after 12 hours
-            {
-                return true;
-            }
-            else{
-                sessionToken = null;
-                tokenTime = null;
-                //Remove the expired sessionToken
-                return false;
-            }
+            return true;
         }
-        else
-        {
+        else{
+            sessionToken = null;
+            tokenTime = null;
+            //Remove the expired sessionToken
             return false;
         }
     }
@@ -101,11 +91,10 @@ public class SessionToken {
 
     /**
      * This method is for when a user needs to log out.
-     * @param token The current session token
      */
-    public void removeSessionToken(String token)
+    public void removeSessionToken()
     {
-        if (this.isTokenValid(token))
+        if (this.isTokenValid())
         {
             sessionToken = null;
             tokenTime = null;
