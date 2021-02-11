@@ -22,6 +22,7 @@ public class Server extends ReceiverAdapter {
         myChannel.connect("Server");
 
         myChannel.setReceiver(this);
+        new RpcDispatcher(myChannel, this);
     }
 
     public synchronized void createBackup(File file) throws IOException {
