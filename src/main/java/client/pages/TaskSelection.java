@@ -91,7 +91,7 @@ public class TaskSelection extends JPanel {
 
         try {
             //if(client.bI().getRole(username) != 3)
-            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()));
+            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()), username);
             int role = Integer.parseInt(client.decryptMessage(encryptedRole, token.returnSessionTokenKey()));
             if(role != 3)
             {

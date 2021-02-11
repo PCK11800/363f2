@@ -277,7 +277,7 @@ public class DataEditor extends JPanel {
         newPerson[7] = editor.getTextArea().getText();
         String[] encryptedNewPerson = client.encryptArrayMessage(newPerson, token.returnSessionTokenKey());
         try {
-            client.bI().storePerson(encryptedNewPerson);
+            client.bI().storePerson(encryptedNewPerson, username);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -302,7 +302,7 @@ public class DataEditor extends JPanel {
         try {
             System.out.println("Delete command - Client");
             //client.bI().deletePerson(name);
-            client.bI().deletePerson(client.encryptMessage(name, token.returnSessionTokenKey()));
+            client.bI().deletePerson(client.encryptMessage(name, token.returnSessionTokenKey()), username);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -312,14 +312,12 @@ public class DataEditor extends JPanel {
     {
         try {
             //View Personal data
-            //if(client.bI().isPermitted(username, 1))
-            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(1), token.returnSessionTokenKey())))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(1), token.returnSessionTokenKey()), username))
             {
                 name.setEnabled(true);
             }
             //Edit Personal Data
-            //if(client.bI().isPermitted(username, 2))
-            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(2), token.returnSessionTokenKey())))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(2), token.returnSessionTokenKey()), username))
             {
                 name.setEditable(true);
                 gender.setEditable(true);
@@ -333,20 +331,17 @@ public class DataEditor extends JPanel {
                 savePerson.setEnabled(true);
             }
             //View Medical Data
-            //if(client.bI().isPermitted(username, 3))
-            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(3), token.returnSessionTokenKey())))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(3), token.returnSessionTokenKey()), username))
             {
                 editor.enableEditor();
             }
             //Edit Medical Data
-            //if(client.bI().isPermitted(username, 4))
-            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(4), token.returnSessionTokenKey())))
+            if(client.bI().isPermitted(client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(4), token.returnSessionTokenKey()), username))
             {
                 editor.enableEditor();
                 editor.getTextArea().setEditable(true);
             }
-            //if(client.bI().getRole(username) == 3)
-            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()));
+            String encryptedRole = client.bI().getRole(client.encryptMessage(username, token.returnSessionTokenKey()), username);
             int role = Integer.parseInt(client.decryptMessage(encryptedRole, token.returnSessionTokenKey()));
             if(role == 3)
             {

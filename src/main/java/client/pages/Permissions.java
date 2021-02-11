@@ -170,11 +170,11 @@ public class Permissions extends JPanel {
                 try {
                     for(int i: added){
                         //client.bI().addPermission(currentSelectedUser, i, username, client.getAdmin_password());
-                        client.bI().addPermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
+                        client.bI().addPermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), username, client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
                     }
                     for(int i: removed){
                         //client.bI().removePermission(currentSelectedUser, i, username, client.getAdmin_password());
-                        client.bI().removePermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), client.encryptMessage(username, token.returnSessionTokenKey()), client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
+                        client.bI().removePermission(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), username, client.encryptMessage(client.getAdmin_password(), token.returnSessionTokenKey()));
                     }
                 } catch (RemoteException re) {
                     re.printStackTrace();
@@ -236,8 +236,7 @@ public class Permissions extends JPanel {
         for(int i = 1; i < 6; i++)
         {
             try {
-                //if(client.bI().isPermitted(currentSelectedUser, i))
-                if(client.bI().isPermitted(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey())))
+                if(client.bI().isPermitted(client.encryptMessage(currentSelectedUser, token.returnSessionTokenKey()), client.encryptMessage(Integer.toString(i), token.returnSessionTokenKey()), this.username))
                 {
                     switch(i)
                     {
@@ -270,4 +269,10 @@ public class Permissions extends JPanel {
     {
         return client;
     }
+
+    public String getUsername()
+    {
+        return username;
+    }
+
 }

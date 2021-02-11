@@ -90,7 +90,7 @@ public class Login extends JPanel {
                     if(login_valid)
                     {
                         credentialNegotiation(username);
-                        sendMessageToServer("Hi Server");
+                        sendMessageToServer("Hi Server", username);
                         //client.setPassword(password);
                         client.setAdmin_password(password);
                         initMultifactorAuthentication(username);
@@ -109,7 +109,7 @@ public class Login extends JPanel {
         add(login_button);
     }
 
-    private void sendMessageToServer(String message)
+    private void sendMessageToServer(String message, String username)
     {
         byte[] messageBytes = message.getBytes();
         try {
@@ -117,7 +117,7 @@ public class Login extends JPanel {
             cipher.init(Cipher.ENCRYPT_MODE, token.stringToKey(sessionKey));
             final byte[] encValue = cipher.doFinal(message.getBytes());
             String encrypted = Base64.getEncoder().encodeToString(encValue);
-            client.bI().exchangeMessages(encrypted);
+            client.bI().exchangeMessages(encrypted, username);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +134,7 @@ public class Login extends JPanel {
             EncryptSessionKey encryptSessionKey = new EncryptSessionKey(serverPublic);
 
             //send encrypted key to server and server decrypts the session key with private key
-            client.bI().sendSessionKey(encryptSessionKey.encryptSessionKey(sessionKey));
+            client.bI().sendSessionKey(encryptSessionKey.encryptSessionKey(sessionKey), username);
 
         } catch (RemoteException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
@@ -173,7 +173,7 @@ public class Login extends JPanel {
         String authenticationCode = "null"; //Default invalid - can't have 7 digit codes
         try
         {
-            authenticationCode = client.decryptMessage(client.bI().sendAuthenticationCode(client.encryptMessage(username, token.stringToKey(sessionKey))), token.stringToKey(sessionKey));
+            authenticationCode = client.decryptMessage(client.bI().sendAuthenticationCode(username), token.stringToKey(sessionKey));
         } catch (RemoteException e) {
             e.printStackTrace();
         }

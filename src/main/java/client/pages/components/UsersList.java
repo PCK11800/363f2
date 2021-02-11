@@ -27,6 +27,7 @@ public class UsersList extends JPanel {
     private int width, height;
     private int mode; //0 = dataEditor, 1 = accountManager
     private SessionToken token;
+    private String username;
 
     public UsersList(Permissions permissions, int width, int height)
     {
@@ -34,6 +35,7 @@ public class UsersList extends JPanel {
         this.token = permissions.getSession();
         this.mode = 0;
         this.client = permissions.getClient();
+        this.username = permissions.getUsername();
         this.width = width;
         this.height = height;
         initUI();
@@ -46,6 +48,7 @@ public class UsersList extends JPanel {
         this.token = accountManager.getSession();
         this.mode = 1;
         this.client = accountManager.getClient();
+        this.username = accountManager.getUsername();
         this.width = width;
         this.height = height;
         initUI();
@@ -192,8 +195,7 @@ public class UsersList extends JPanel {
                     {
                         int person = 0;
                         try {
-                            //person = client.bI().getRole(nameButton.getText());
-                            String encryptedPerson = client.bI().getRole(client.encryptMessage(nameButton.getText(), token.returnSessionTokenKey()));
+                            String encryptedPerson = client.bI().getRole(client.encryptMessage(nameButton.getText(), token.returnSessionTokenKey()), username);
                             person = Integer.parseInt(client.decryptMessage(encryptedPerson, token.returnSessionTokenKey()));
                         } catch (RemoteException remoteException) {
                             remoteException.printStackTrace();
