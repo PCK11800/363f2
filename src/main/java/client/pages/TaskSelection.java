@@ -57,6 +57,7 @@ public class TaskSelection extends JPanel {
                 }
                 else
                 {
+                    System.out.println("Session token expired");
                     try {
                         client.bI().logout(username);
                     } catch (RemoteException remoteException) {
@@ -80,6 +81,7 @@ public class TaskSelection extends JPanel {
                 }
                 else
                 {
+                    System.out.println("Session token expired");
                     try {
                         client.bI().logout(username);
                     } catch (RemoteException remoteException) {
@@ -103,6 +105,7 @@ public class TaskSelection extends JPanel {
                 }
                 else
                 {
+                    System.out.println("Session token expired");
                     try {
                         client.bI().logout(username);
                     } catch (RemoteException remoteException) {

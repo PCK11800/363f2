@@ -47,7 +47,7 @@ public class SessionToken {
         //Find the time between when the token was generated an the current time
         Duration duration = Duration.between(tokenTime, currentTime);
 
-        if (duration.toHours() <= 12) //The token will expire after 12 hours
+        if (duration.toHours() <= 1) //The token will expire after 12 hours
         {
             return true;
         }
