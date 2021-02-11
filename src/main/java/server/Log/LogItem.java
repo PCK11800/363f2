@@ -31,7 +31,7 @@ public class LogItem implements Serializable{
                 break;    
         }
         str = str + "[" + user + "] ";
-        return str + desc + '\n';
+        return str + desc + " Hash: " + hash.toString() +'\n';
     }
 
     public byte[] getHash()
