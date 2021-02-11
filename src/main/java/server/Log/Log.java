@@ -1,5 +1,7 @@
 package server.Log;
 
+import server.backuplog.BackupClass;
+
 import java.util.LinkedList;
 import java.security.MessageDigest;
 import java.util.*;
@@ -56,11 +58,14 @@ public class Log {
     private boolean saveLog()
     {
         try {
-            FileOutputStream FOS = new FileOutputStream(new File("Log.txt"));
+            FileOutputStream FOS = new FileOutputStream(new File("data/log/Log.txt"));
             ObjectOutputStream OOS = new ObjectOutputStream(FOS);
             OOS.writeObject(log);
             FOS.close();
             OOS.close();
+
+            //Backup
+            BackupClass.createBackup();
             return true;
         } catch (Exception e) {
             System.out.println("Log save failed: " + e);
@@ -71,12 +76,17 @@ public class Log {
     private LinkedList<LogItem> loadLog()
     {
         try {
-            FileInputStream FIS = new FileInputStream(new File("Log.txt"));
+            FileInputStream FIS = new FileInputStream(new File("data/log/Log.txt"));
             ObjectInputStream OIS = new ObjectInputStream(FIS);
             return (LinkedList<LogItem>) OIS.readObject();
         } catch (Exception e) {
             System.out.println("Password Load Failed: " + e);
             return new LinkedList<LogItem>();
         }
+    }
+
+    public static void main(String[] args)
+    {
+        new Log().saveLog();
     }
 }
