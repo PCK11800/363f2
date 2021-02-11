@@ -200,6 +200,9 @@ public class Backend extends UnicastRemoteObject implements BackendInterface {
         String code = mfa.generateAuthenticationCode();
         mfa.sendAuthenticationCode(email, code);
         log.addMsg(0,"Authentication code sent" , username);
+        System.out.println("-----------------------------------------------------");
+        System.out.println("Authentication Code: " + code);
+        System.out.println("-----------------------------------------------------");
         String encryptedCode = this.encryptMessage(code, getSessionKey(username));
         return encryptedCode;
     }

@@ -139,13 +139,13 @@ public class Permissions extends JPanel {
                     removed.add(1);
                 }
 
-                if(userRole == 1 || userRole == 2 || userRole == 3) {
-                    if(viewDoctorsNote.isSelected()) {
-                        added.add(3);
-                    } else{
-                        removed.add(3);
-                    }
+                if(viewDoctorsNote.isSelected()) {
+                    added.add(3);
+                } else{
+                    removed.add(3);
+                }
 
+                if(userRole == 1 || userRole == 2 || userRole == 3) {
                     if(selectOtherPeopleData.isSelected()) {
                         added.add(5);
                     } else{
