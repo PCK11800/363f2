@@ -1,3 +1,5 @@
+package client.backuplog;
+
 import java.rmi.RemoteException;
 import java.io.File;
 import java.rmi.Remote;
